@@ -1,7 +1,9 @@
 ---
 title: "Repeats in hg19 (RepeatMasker base)"
 author: "Ronica K"
-output: html_document
+output: 
+  html_document:
+    keep_md: true
 ---
 
 ```{r setup, include=FALSE}
