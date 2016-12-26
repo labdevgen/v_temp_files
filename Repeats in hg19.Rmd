@@ -1,0 +1,160 @@
+---
+title: "Repeats in hg19 (RepeatMasker base)"
+author: "Ronica K"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+###Loading/cleaning
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+library(GenomicRanges)
+library(AnnotationHub)
+library(ggplot2)
+
+#max gap between repeats
+N <- 10^6
+```
+
+UCSC RepeatMasker package
+
+```{r, echo=FALSE}
+ah <- AnnotationHub()
+hh <- subset(ah, species=='Homo sapiens' & genome=='hg19')
+qh <- query(hh, 'RepeatMasker')
+qh
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+rm <- qh[[1]]
+rm
+```
+
+Subsetting the data to include only chromosomes 1-22, X, Y
+
+```{r, echo=FALSE}
+seqlevels(rm, force=TRUE) <- paste0("chr", c(1:22, "X", "Y"))
+rm
+```
+
+Number of unique repeat sequences
+
+```{r, echo=FALSE}
+length(unique(rm$name))
+```
+
+###Repeat coverage
+
+Coverage distribution
+
+```{r, echo=FALSE}
+Y <- sapply(split(rm, rm$name), function(x) sum(width(x)))
+dy <- do.call(rbind, Map(data.frame, Y=Y))
+summary(dy)
+```
+
+Square root scale, red median, blue mean
+```{r, echo=FALSE}
+ggplot(dy, aes(Y)) + geom_histogram(binwidth=100) + geom_vline(xintercept=median(Y), color='red') + scale_x_sqrt() + geom_vline(xintercept=mean(Y), color='blue')
+```
+
+Repeat coverage by chromosome
+
+```{r, echo=FALSE}
+cr <- sapply(split(rm, seqnames(rm)), function(x) sum(width(x)))
+dc <- do.call(rbind, Map(data.frame, Mb=cr/10^6))
+dc
+ggplot(dc, aes(y=Mb, x=row.names(dc))) + geom_bar(stat="identity") + scale_x_discrete(limits=paste0("chr", c(1:22, "X", "Y"))) + coord_flip()
+```
+
+###MADE1 repeat sequence 
+http://www.repeatmasker.org/cgi-bin/ViewRepeat?id=MADE1
+
+Across the genome
+
+```{r, echo=FALSE}
+seq <- 'MADE1'
+cov_seq <- coverage(rm[rm$name==seq])
+cov_seq
+```
+
+On chromosome Y
+
+```{r, echo=FALSE}
+cov_seq['chrY']
+rl <- runLength(cov_seq$chrY)
+rl
+```
+
+Gaps exceeding N(=10^6)
+
+```{r, echo=FALSE}
+rl[rl>N]
+```
+
+Reduced intervals
+
+```{r, echo=FALSE}
+red <- reduce(rm[rm$name==seq], min.gapwidth=N+1, ignore.strand=TRUE)
+red_cov <- coverage(red)
+red_cov
+
+red_cov['chrY']
+runLength(red_cov$chrY)
+```
+
+Max MADE1 cluster
+
+```{r, echo=FALSE}
+max(width(red))
+
+red[width(red)==max(width(red))]
+
+red_cov['chrX']
+```
+
+###Maximum Cluster Length 
+
+```{r, echo=FALSE}
+X <- sapply(split(rm, rm$name), function(x) max(width(reduce(x, min.gapwidth=N+1L, ignore.strand=TRUE))))
+```
+
+Distribution
+```{r, echo=FALSE}
+dx <- do.call(rbind, Map(data.frame, X=X))
+summary(dx)
+```
+
+Square root scale, red median, blue mean
+
+```{r, echo=FALSE}
+ggplot(dx, aes(X)) + geom_histogram(binwidth=100) + geom_vline(xintercept=median(X), color='red') + geom_vline(xintercept=mean(X), color='blue') + scale_x_sqrt()
+```
+
+###Maximum Cluster Length vs Total Coverage
+
+```{r, echo=FALSE}
+df <- do.call(rbind, Map(data.frame, X=X, Y=Y))
+head(df)
+```
+
+
+```{r, echo=FALSE}
+ggplot(df, aes(X/10^6, Y/10^6)) + geom_point(shape=1) + labs(x ='Max Cluster Length, Mb', y = 'Total Coverage, Mb')
+```
+
+log10 scale
+
+```{r, echo=FALSE}
+ggplot(df, aes(X/10^6, Y/10^6)) + geom_point(shape=1) + scale_x_log10() + scale_y_log10() + labs(x ='Max Cluster Length, Mb (log10 scale)', y = 'Total Coverage, Mb (log10 scale)')
+```
+
+###Session Info
+
+```{r, echo=FALSE}
+sessionInfo()
+
+```
