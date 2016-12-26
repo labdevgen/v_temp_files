@@ -116,6 +116,7 @@ max(width(red))
 red[width(red)==max(width(red))]
 
 red_cov['chrX']
+runLength(red_cov$chrX)
 ```
 
 ###Maximum Cluster Length 
