@@ -150,7 +150,77 @@ Repeat coverage by chromosome
 ###MADE1 repeat sequence 
 http://www.repeatmasker.org/cgi-bin/ViewRepeat?id=MADE1
 
-Across the genome
+
+
+```
+## GRanges object with 7794 ranges and 2 metadata columns:
+##          seqnames               ranges strand |        name     score
+##             <Rle>            <IRanges>  <Rle> | <character> <numeric>
+##      [1]     chr1   [4892439, 4892489]      + |       MADE1       284
+##      [2]     chr1   [4915157, 4915176]      - |       MADE1       244
+##      [3]     chr1   [4915201, 4915223]      - |       MADE1       244
+##      [4]     chr1   [4915524, 4915564]      - |       MADE1       244
+##      [5]     chr1   [4952138, 4952217]      - |       MADE1       552
+##      ...      ...                  ...    ... .         ...       ...
+##   [7790]    chr22 [48039810, 48039854]      - |       MADE1       312
+##   [7791]    chr22 [48118232, 48118319]      + |       MADE1       488
+##   [7792]    chr22 [48241480, 48241549]      - |       MADE1       479
+##   [7793]    chr22 [49524958, 49525012]      + |       MADE1       249
+##   [7794]    chr22 [49525520, 49525561]      + |       MADE1       289
+##   -------
+##   seqinfo: 24 sequences from hg19 genome
+```
+
+```
+## GRanges object with 52 ranges and 2 metadata columns:
+##        seqnames               ranges strand |        name     score
+##           <Rle>            <IRanges>  <Rle> | <character> <numeric>
+##    [1]     chrY   [ 564822,  564869]      - |       MADE1       263
+##    [2]     chrY   [ 736342,  736383]      - |       MADE1       263
+##    [3]     chrY   [1653556, 1653617]      - |       MADE1       281
+##    [4]     chrY   [1959698, 1959738]      + |       MADE1       250
+##    [5]     chrY   [1961109, 1961149]      + |       MADE1       256
+##    ...      ...                  ...    ... .         ...       ...
+##   [48]     chrY [19491155, 19491199]      + |       MADE1       271
+##   [49]     chrY [19495503, 19495554]      + |       MADE1       302
+##   [50]     chrY [22605007, 22605091]      - |       MADE1       435
+##   [51]     chrY [22786367, 22786436]      + |       MADE1       271
+##   [52]     chrY [28557211, 28557293]      - |       MADE1       514
+##   -------
+##   seqinfo: 24 sequences from hg19 genome
+```
+
+```
+##       num.ranges genome.covered
+## chr1         516          32256
+## chr2         659          41814
+## chr3         524          32526
+## chr4         590          36888
+## chr5         510          31242
+## chr6         460          28936
+## chr7         489          30037
+## chr8         473          29643
+## chr9         292          18391
+## chr10        341          21361
+## chr11        352          22039
+## chr12        375          23255
+## chr13        268          17120
+## chr14        244          14902
+## chr15        169          10128
+## chr16        268          16552
+## chr17        167          10098
+## chr18        210          13584
+## chr19        106           5592
+## chr20        142           9060
+## chr21        121           7858
+## chr22         52           3331
+## chrX         414          25763
+## chrY          52           3172
+```
+
+__Rle coverage__
+
+- genome
 
 
 ```
@@ -184,12 +254,10 @@ Across the genome
 ## <19 more elements>
 ```
 
-On chromosome Y
+- chromosome Y
 
 
 ```
-## RleList of length 1
-## $chrY
 ## integer-Rle of length 59373566 with 105 runs
 ##   Lengths:   564821       48   171472 ...  5770774       83 30816273
 ##   Values :        0        1        0 ...        0        1        0
@@ -213,14 +281,87 @@ On chromosome Y
 ##  [99]  3109452       85   181275       70  5770774       83 30816273
 ```
 
-Gaps exceeding N(=10^6)
+__Reduced ranges__
+
+- genome
+
+
+```
+## GRanges object with 651 ranges and 0 metadata columns:
+##         seqnames               ranges strand
+##            <Rle>            <IRanges>  <Rle>
+##     [1]     chr1 [ 4892439,  5876014]      *
+##     [2]     chr1 [ 7922473,  8032684]      *
+##     [3]     chr1 [11458333, 12713316]      *
+##     [4]     chr1 [14461542, 15187925]      *
+##     [5]     chr1 [16606984, 20534163]      *
+##     ...      ...                  ...    ...
+##   [647]     chrY [  564822,  5982639]      *
+##   [648]     chrY [ 7011263,  7338754]      *
+##   [649]     chrY [13399234, 19495554]      *
+##   [650]     chrY [22605007, 22786436]      *
+##   [651]     chrY [28557211, 28557293]      *
+##   -------
+##   seqinfo: 24 sequences from hg19 genome
+```
+
+- chromosome Y
+
+
+```
+## GRanges object with 5 ranges and 0 metadata columns:
+##       seqnames               ranges strand
+##          <Rle>            <IRanges>  <Rle>
+##   [1]     chrY [  564822,  5982639]      *
+##   [2]     chrY [ 7011263,  7338754]      *
+##   [3]     chrY [13399234, 19495554]      *
+##   [4]     chrY [22605007, 22786436]      *
+##   [5]     chrY [28557211, 28557293]      *
+##   -------
+##   seqinfo: 24 sequences from hg19 genome
+```
+
+__Number of gaps > N(1Mb) / Number of ranges after reduction__
+
+
+```
+##       num.gaps num.red.ranges
+## chr1        57             57
+## chr2        52             53
+## chr3        44             45
+## chr4        35             36
+## chr5        33             34
+## chr6        39             39
+## chr7        33             33
+## chr8        26             26
+## chr9        30             30
+## chr10       32             32
+## chr11       29             30
+## chr12       30             31
+## chr13       17             17
+## chr14       19             18
+## chr15       23             22
+## chr16       21             20
+## chr17       29             28
+## chr18       18             18
+## chr19       18             17
+## chr20       17             16
+## chr21        7              7
+## chr22       10              9
+## chrX        27             28
+## chrY         5              5
+```
+
+Gaps on chromosome Y
 
 
 ```
 ## [1]  1028623  6060479  3109452  5770774 30816273
 ```
 
-Reduced intervals
+__Rle__
+
+- genome
 
 
 ```
@@ -254,9 +395,10 @@ Reduced intervals
 ## <19 more elements>
 ```
 
+- chromosome Y
+
+
 ```
-## RleList of length 1
-## $chrY
 ## integer-Rle of length 59373566 with 11 runs
 ##   Lengths:   564821  5417818  1028623 ...  5770774       83 30816273
 ##   Values :        0        1        0 ...        0        1        0
@@ -267,7 +409,7 @@ Reduced intervals
 ##  [8]   181430  5770774       83 30816273
 ```
 
-Max MADE1 cluster
+__Max MADE1 cluster__
 
 
 ```
@@ -284,8 +426,6 @@ Max MADE1 cluster
 ```
 
 ```
-## RleList of length 1
-## $chrX
 ## integer-Rle of length 155270560 with 57 runs
 ##   Lengths:   614821  8531560  1011920 ...  1730765   603417   463140
 ##   Values :        0        1        0 ...        0        1        0
@@ -321,7 +461,7 @@ Distribution
 
 Square root scale, red median, blue mean
 
-![](Repeats_in_hg19_files/figure-html/unnamed-chunk-16-1.png)<!-- -->
+![](Repeats_in_hg19_files/figure-html/unnamed-chunk-21-1.png)<!-- -->
 
 ###Maximum Cluster Length vs Total Coverage
 
@@ -337,11 +477,11 @@ Square root scale, red median, blue mean
 ```
 
 
-![](Repeats_in_hg19_files/figure-html/unnamed-chunk-18-1.png)<!-- -->
+![](Repeats_in_hg19_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
 
 log10 scale
 
-![](Repeats_in_hg19_files/figure-html/unnamed-chunk-19-1.png)<!-- -->
+![](Repeats_in_hg19_files/figure-html/unnamed-chunk-24-1.png)<!-- -->
 
 ###Session Info
 
@@ -375,17 +515,16 @@ log10 scale
 ##  [9] evaluate_0.10                 memoise_1.0.0                
 ## [11] tibble_1.2                    gtable_0.2.0                 
 ## [13] shiny_0.14.2                  DBI_0.5-1                    
-## [15] curl_2.3                      yaml_2.1.14                  
-## [17] httr_1.2.1                    stringr_1.1.0                
-## [19] knitr_1.15.1                  rprojroot_1.1                
-## [21] grid_3.3.2                    Biobase_2.34.0               
-## [23] R6_2.2.0                      AnnotationDbi_1.36.0         
-## [25] rmarkdown_1.3                 magrittr_1.5                 
-## [27] backports_1.0.4               scales_0.4.1                 
-## [29] htmltools_0.3.5               assertthat_0.1               
-## [31] mime_0.5                      interactiveDisplayBase_1.12.0
-## [33] xtable_1.8-2                  colorspace_1.3-2             
-## [35] httpuv_1.3.3                  labeling_0.3                 
-## [37] stringi_1.1.2                 lazyeval_0.2.0               
-## [39] munsell_0.4.3
+## [15] yaml_2.1.14                   httr_1.2.1                   
+## [17] stringr_1.1.0                 knitr_1.15.1                 
+## [19] rprojroot_1.1                 grid_3.3.2                   
+## [21] Biobase_2.34.0                R6_2.2.0                     
+## [23] AnnotationDbi_1.36.0          rmarkdown_1.3                
+## [25] magrittr_1.5                  backports_1.0.4              
+## [27] scales_0.4.1                  htmltools_0.3.5              
+## [29] assertthat_0.1                mime_0.5                     
+## [31] interactiveDisplayBase_1.12.0 xtable_1.8-2                 
+## [33] colorspace_1.3-2              httpuv_1.3.3                 
+## [35] labeling_0.3                  stringi_1.1.2                
+## [37] lazyeval_0.2.0                munsell_0.4.3
 ```

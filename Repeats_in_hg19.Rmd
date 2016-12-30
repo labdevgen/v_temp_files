@@ -7,12 +7,12 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = F)
 ```
 
 ###Loading/cleaning
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
+```{r, echo=F, message=F, warning=F}
 library(GenomicRanges)
 library(AnnotationHub)
 library(ggplot2)
@@ -76,53 +76,84 @@ ggplot(dc, aes(y=Mb, x=row.names(dc))) + geom_bar(stat="identity") + scale_x_dis
 http://www.repeatmasker.org/cgi-bin/ViewRepeat?id=MADE1
 
 
-```{r, echo=T}
+```{r, echo=F}
 seq <- 'MADE1'
 seqsubset <- rm[(elementMetadata(rm)[,1]==seq)]
 seqsubset
-seqr <- sapply(split(seqsubset, seqnames(seqsubset)), function(x) sum(width(x)))
-seqr
-#seqc <- do.call(rbind, Map(data.frame, Mb=seqr/10^6))
-#seqc
-#ggplot(dc, aes(y=Mb, x=row.names(seqc))) + geom_bar(stat="identity") + scale_x_discrete(limits=paste0("chr", c(1:22, "X", "Y"))) + coord_flip()
+seqsubset[seqnames(seqsubset)=='chrY']
+
+numrep <- sapply(split(seqsubset, seqnames(seqsubset)), function(x) length(ranges(x)))
+covrep <- sapply(split(seqsubset, seqnames(seqsubset)), function(x) sum(width(x)))
+
+do.call(rbind, Map(data.frame, num.ranges=numrep, genome.covered=covrep))
 ```
 
-Across the genome
+__Rle coverage__
+
+- genome
 
 ```{r, echo=F}
-cov_seq <- coverage(rm[rm$name==seq])
+cov_seq <- coverage(seqsubset)
 cov_seq
 ```
 
-On chromosome Y
+- chromosome Y
 
 ```{r, echo=F}
 cov_seq$chrY
 rl <- runLength(cov_seq$chrY)
 rl
-sum(runValue(cov_seq$chrY))
 ```
 
-Gaps exceeding N(=10^6) on chromosome Y
+__Reduced ranges__
 
-```{r, echo=FALSE}
+- genome
+
+```{r, echo=F}
+red <- reduce(seqsubset, min.gapwidth=N+1, ignore.strand=TRUE)
+numredrep <- sapply(split(red, seqnames(red)), function(x) length(ranges(x)))
+red
+```
+
+- chromosome Y
+
+```{r, echo=F}
+red[seqnames(red)=='chrY']
+```
+
+__Number of gaps > N(1Mb) / Number of ranges after reduction__
+
+```{r, echo=F}
+gaps <- sapply(cov_seq, function(x) sum(runLength(x)>N))
+
+do.call(rbind, Map(data.frame, num.gaps=gaps, num.red.ranges=numredrep))
+```
+
+Gaps on chromosome Y
+
+```{r, echo=F}
 rl[rl>N]
 ```
 
-Reduced intervals
+__Rle__
 
-```{r, echo=FALSE}
-red <- reduce(rm[rm$name==seq], min.gapwidth=N+1, ignore.strand=TRUE)
+- genome
+
+```{r, echo=F}
 red_cov <- coverage(red)
 red_cov
+```
 
+- chromosome Y
+
+```{r, echo=F}
 red_cov$chrY
 runLength(red_cov$chrY)
 ```
 
-Max MADE1 cluster
+__Max MADE1 cluster__
 
-```{r, echo=FALSE}
+```{r, echo=F}
 max(width(red))
 
 red[width(red)==max(width(red))]
@@ -133,25 +164,25 @@ runLength(red_cov$chrX)
 
 ###Maximum Cluster Length 
 
-```{r, echo=FALSE}
+```{r, echo=F}
 X <- sapply(split(rm, rm$name), function(x) max(width(reduce(x, min.gapwidth=N+1L, ignore.strand=TRUE))))
 ```
 
 Distribution
-```{r, echo=FALSE}
+```{r, echo=F}
 dx <- do.call(rbind, Map(data.frame, X=X))
 summary(dx)
 ```
 
 Square root scale, red median, blue mean
 
-```{r, echo=FALSE}
+```{r, echo=F}
 ggplot(dx, aes(X)) + geom_histogram(binwidth=100) + geom_vline(xintercept=median(X), color='red') + geom_vline(xintercept=mean(X), color='blue') + scale_x_sqrt()
 ```
 
 ###Maximum Cluster Length vs Total Coverage
 
-```{r, echo=FALSE}
+```{r, echo=F}
 df <- do.call(rbind, Map(data.frame, X=X, Y=Y))
 head(df)
 ```
@@ -169,7 +200,7 @@ ggplot(df, aes(X/10^6, Y/10^6)) + geom_point(shape=1) + scale_x_log10() + scale_
 
 ###Session Info
 
-```{r, echo=FALSE}
+```{r, echo=F}
 sessionInfo()
 
 ```
