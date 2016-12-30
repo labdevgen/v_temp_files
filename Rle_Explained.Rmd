@@ -1,0 +1,209 @@
+---
+title: "Coverage and reduced intervals"
+author: "Ronica K"
+output: 
+  html_document:
+    keep_md: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, echo=F, message=F, warning=F}
+library(GenomicRanges)
+library(ggplot2)
+
+
+plotRanges <- function(x, xlim=x, main=deparse(substitute(x)),
+                       col='black', sep=0.5,...){
+  height <- 1
+  if (is(xlim, 'Ranges'))
+    xlim <- c(min(start(xlim)), max(end(xlim)))
+  bins <- disjointBins(IRanges(start(x), end(x) + 1))
+  plot.new()
+  plot.window(xlim, c(0, max(bins)*(height+sep)))
+  ybottom <- bins*(sep+height)-height
+  rect(start(x)-0.5, ybottom, end(x)+0.5, ybottom+height, col=col,...)
+  title(main)
+  axis(1)
+}
+```
+
+###Coverage and Rle
+
+Some NON-overlapping ranges on chromosome 1 (30 bp length) of some NON-existing creature
+
+```{r, echo=F, cache=T}
+r <- GRanges(seqnames = "chr1", strand = c("+", "+", "+", "+"), ranges = IRanges(start = c(6,13,18,24), width = 3))
+seqlengths(r) <- 30
+r
+```
+
+```{r, echo=F, fig.height=2.5}
+plotRanges(ranges(r))
+```
+
+- Coverage 
+
+Lengths - length of a genome segment 
+
+Values - number of ranges that cover the segment
+
+```{r, echo=F}
+rcov <- coverage(r)
+rcov
+```
+
+
+This one is a direct representation of coverage
+
+Chromosome length on x-axis, number of covering ranges on y-axis
+
+```{r, echo=F}
+plot(as.numeric(rcov$chr1))
+```
+
+- Add some overlap (ranges 2 and 3)
+
+```{r, echo=F, cache=T}
+rO <- GRanges(seqnames = "chr1", strand = c("+", "+", "+", "+"), ranges = IRanges(start = c(6,13,18,24), width = c(3,6,3,3)))
+seqlengths(rO) <- 30
+rO
+```
+
+```{r, echo=F, fig.height=3.3}
+plotRanges(ranges(rO))
+```
+
+Note the difference in Lengths and Values 
+
+```{r, echo=F}
+rOcov <- coverage(rO)
+rOcov
+```
+
+```{r, echo=F}
+plot(as.numeric(rOcov$chr1))
+```
+
+
+- And some more  
+
+```{r, echo=F, cache=T}
+r2O <- GRanges(seqnames = "chr1", strand = c("+", "+", "+", "+"), ranges = IRanges(start = c(6,13,18,24), width = c(9,6,8,3)))
+seqlengths(r2O) <- 30
+r2O
+```
+
+```{r, echo=F, fig.height=3.3}
+plotRanges(ranges(r2O))
+```
+
+```{r, echo=F}
+r2Ocov <- coverage(r2O)
+r2Ocov
+```
+
+```{r, echo=F}
+plot(as.numeric(r2Ocov$chr1))
+```
+
+
+- And even more  
+
+```{r, echo=F, cache=T}
+r3O <- GRanges(seqnames = "chr1", strand = c("+", "+", "+", "+"), ranges = IRanges(start = c(6,13,18,24), width = c(13,8,8,3)))
+seqlengths(r3O) <- 30
+r3O
+```
+
+```{r, echo=F, fig.height=4}
+plotRanges(ranges(r3O))
+```
+
+```{r, echo=F}
+r3Ocov <- coverage(r3O)
+r3Ocov
+```
+
+```{r, echo=F}
+plot(as.numeric(r3Ocov$chr1))
+```
+
+
+###Reduced ranges
+
+Get back to the first set of ranges with no overlaps
+
+There we have gaps of lengths 2, 3 and 4 bp
+```{r, echo=F}
+r
+```
+
+```{r, echo=F}
+coverage(r)
+```
+
+```{r, echo=F}
+plot(c(0,30), c(0,0), type="n", xlab=seqnames(r)[1], ylab="")
+arrows(start(r),rep(0,length(r)),
+       end(r),rep(0,length(r)),
+       lwd=3, length=.1)
+```
+
+Lets reduce two ranges into one if they are 
+
+- 2 (or less) bp apart
+
+```{r, echo=F}
+red2 <- reduce(r, min.gapwidth=2+1)
+red2
+```
+
+```{r, echo=F}
+coverage(red2)
+```
+
+```{r, echo=F}
+plot(c(0,30), c(0,0), type="n", xlab=seqnames(red2)[1], ylab="")
+arrows(start(red2),rep(0,length(red2)),
+       end(red2),rep(0,length(red2)),
+       lwd=3, length=.1)
+```
+
+- 3 or less
+
+```{r, echo=F}
+red3 <- reduce(r, min.gapwidth=3+1)
+red3
+```
+
+```{r, echo=F}
+coverage(red3)
+```
+
+```{r, echo=F}
+plot(c(0,30), c(0,0), type="n", xlab=seqnames(red3)[1], ylab="")
+arrows(start(red3),rep(0,length(red3)),
+       end(red3),rep(0,length(red3)),
+       lwd=3, length=.1)
+```
+
+- 4 or less
+
+```{r, echo=F}
+red4 <- reduce(r, min.gapwidth=4+1)
+red4
+```
+
+```{r, echo=F}
+coverage(red4)
+```
+
+```{r, echo=F}
+plot(c(0,30), c(0,0), type="n", xlab=seqnames(red4)[1], ylab="")
+arrows(start(red4),rep(0,length(red4)),
+       end(red4),rep(0,length(red4)),
+       lwd=3, length=.1)
+```
