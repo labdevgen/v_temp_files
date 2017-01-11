@@ -57,7 +57,6 @@ Coverage distribution
 
 ```{r, echo=F, cache=T}
 Y <- sapply(split(rm, rm$name), function(x) sum(width(x)))
-#sum(gr > 0)
 dy <- do.call(rbind, Map(data.frame, Y=Y))
 summary(dy)
 ```
@@ -68,24 +67,23 @@ Y[Y==max(Y)]
 ```
 
 Square root scale, red median, blue mean
-```{r, echo=F, cache=T}
+```{r, echo=F, cache=F}
 ggplot(dy, aes(Y)) + geom_histogram(binwidth=100) + geom_vline(xintercept=median(Y), color='red') + scale_x_sqrt() + geom_vline(xintercept=mean(Y), color='blue')
 ```
 
 Repeat coverage by chromosome
 
-```{r, echo=F, cache=T}
+```{r, echo=F, cache=F}
 cr <- sapply(split(rm, seqnames(rm)), function(x) sum(width(x)))
 dc <- do.call(rbind, Map(data.frame, Mb=cr/10^6))
 dc
 ggplot(dc, aes(y=Mb, x=row.names(dc))) + geom_bar(stat="identity") + scale_x_discrete(limits=paste0("chr", c(1:22, "X", "Y"))) + coord_flip()
 ```
 
-###MADE1 repeat sequence 
-http://www.repeatmasker.org/cgi-bin/ViewRepeat?id=MADE1
 
-
-```{r, echo=F}
+```{r, eval=F, include=F}
+####MADE1 repeat sequence 
+#http://www.repeatmasker.org/cgi-bin/ViewRepeat?id=MADE1
 seq <- 'MADE1'
 seqsubset <- rm[(elementMetadata(rm)[,1]==seq)]
 seqsubset
@@ -97,73 +95,82 @@ covrep <- sapply(split(seqsubset, seqnames(seqsubset)), function(x) sum(width(x)
 do.call(rbind, Map(data.frame, num.ranges=numrep, genome.covered=covrep))
 ```
 
-__Rle coverage__
 
-- genome
+```{r, eval=F, include=F}
+#__Rle coverage__
 
-```{r, echo=F}
+#- genome
+
 cov_seq <- coverage(seqsubset)
 cov_seq
 ```
 
-- chromosome Y
 
-```{r, echo=F}
+```{r, eval=F, include=F}
+# chromosome Y
+
 cov_seq$chrY
 rl <- runLength(cov_seq$chrY)
 rl
 ```
 
-__Reduced ranges__
 
-- genome
+```{r, eval=F, include=F}
+#__Reduced ranges__
 
-```{r, echo=F}
+#- genome
+
 red <- reduce(seqsubset, min.gapwidth=N+1, ignore.strand=TRUE)
 numredrep <- sapply(split(red, seqnames(red)), function(x) length(ranges(x)))
 red
 ```
 
-- chromosome Y
 
-```{r, echo=F}
+```{r, eval=F, include=F}
+#- chromosome Y
+
 red[seqnames(red)=='chrY']
 ```
 
-__Number of gaps(including flanks) > N(1Mb) / Number of ranges after reduction__
 
-```{r, echo=F, cache=T}
+```{r, eval=F, cache=T, include=F}
+#__Number of gaps(including flanks) > N(1Mb) / Number of ranges after reduction__
+
 gaps <- sum(runLength(cov_seq)[runValue(cov_seq)==0] > N)
 
 do.call(rbind, Map(data.frame, num.gaps=gaps, num.red.ranges=numredrep))
 ```
 
-Gaps on chromosome Y
 
-```{r, echo=F}
+```{r, eval=F, include=F}
+#Gaps on chromosome Y
+
 rl[runValue(cov_seq$chrY)==0 & rl>N]
-
 ```
 
-__Rle coverage (after reduction)__
 
-- genome
+```{r, eval=F, cache=T, include=F}
 
-```{r, echo=F, cache=T}
+#__Rle coverage (after reduction)__
+
+#- genome
+
 red_cov <- coverage(red)
 red_cov
 ```
 
-- chromosome Y
 
-```{r, echo=F}
+```{r, eval=F, echo=F, include=F}
+#- chromosome Y
+
 red_cov$chrY
 runLength(red_cov$chrY)
 ```
 
-__Max MADE1 cluster__
 
-```{r, echo=F}
+```{r, eval=F, echo=F, include=F}
+#__Max MADE1 cluster__
+
 max(width(red))
 
 red[width(red)==max(width(red))]
@@ -191,7 +198,7 @@ X[X==max(X)]
 
 Square root scale, red median, blue mean
 
-```{r, echo=F, cache=T}
+```{r, echo=F, cache=F}
 ggplot(dx, aes(X)) + geom_histogram(binwidth=150) + geom_vline(xintercept=median(X), color='red') + geom_vline(xintercept=mean(X), color='blue') + scale_x_sqrt()
 ```
 
@@ -203,13 +210,13 @@ head(df)
 ```
 
 
-```{r, echo=F, cache=T}
+```{r, echo=F, cache=F}
 ggplot(df, aes(X/10^6, Y/10^6)) + geom_point(shape=1) + labs(x ='Max Cluster Length, Mb', y = 'Total Coverage, Mb') + geom_vline(xintercept=median(X)/10^6, color='red') + geom_hline(yintercept=median(Y)/10^6, color='red')
 ```
 
 log10 scale
 
-```{r, echo=F, cache=T}
+```{r, echo=F, cache=F}
 ggplot(df, aes(X/10^6, Y/10^6)) + geom_point(shape=1) + scale_x_log10() + scale_y_log10() + labs(x ='Max Cluster Length, Mb (log10 scale)', y = 'Total Coverage, Mb (log10 scale)') + geom_vline(xintercept=log10(median(X)/10^6), color='red') + geom_hline(yintercept=log10(median(Y)/10^6+1), color='red')
 ```
 
@@ -233,8 +240,224 @@ Z[Z==max(Z)]
 
 Square root scale, red median, blue mean
 
-```{r, echo=F, cache=T}
+```{r, echo=F, cache=F}
 ggplot(dnz, aes(Z)) + geom_histogram(binwidth=25) + geom_vline(xintercept=median(Z), color='red') + geom_vline(xintercept=mean(Z), color='blue') + scale_x_sqrt()
+```
+
+Coverage
+```{r, echo=F, cache=T}
+sum(Z)
+```
+
+###Repeat Sequences
+
+- Simple Repeat SATR1 (http://www.repeatmasker.org/cgi-bin/ViewRepeat?id=SATR1)
+- SINE AluYa8 (http://www.repeatmasker.org/cgi-bin/ViewRepeat?id=AluYa8)
+- DNA transposon HSMAR1 (http://www.repeatmasker.org/cgi-bin/ViewRepeat?id=HSMAR1)
+- LTR retrotransposon MER95 (http://www.repeatmasker.org/cgi-bin/ViewRepeat?id=MER95)
+- LINE UCON13 (http://www.repeatmasker.org/cgi-bin/ViewRepeat?id=UCON13)
+
+```{r, echo=F, cache=T}
+seq_simple <- 'SATR1' #Simple Repeat
+seq_sine <- 'AluYa8' #SINE
+seq_dna <- 'HSMAR1' #DNA transposon
+seq_ltr <- 'MER95' #LTR
+seq_line <- 'UCON13' #LINE
+```
+
+__Simple Repeat Sequence SATR1__
+
+```{r, echo=F, cache=F}
+seqsubset <- rm[(elementMetadata(rm)[,1]==seq_simple)]
+seqsubset[order(seqnames(seqsubset))]
+sum(width(seqsubset))
+```
+
+- reduced intervals
+
+```{r, echo=F, cache=F}
+redr <- reduce(seqsubset, min.gapwidth=N+1L)
+redr
+sort(width(redr), decreasing=TRUE)
+sum(width(redr))
+```
+
+- reduced intervals shorter than or equal to 100Kb
+
+```{r, echo=F, cache=F}
+redrM <- redr[width(redr)<=M]
+redrM
+sort(width(redrM), decreasing=TRUE)
+sum(width(redrM))
+```
+
+- initial intervals located within reduced intervals
+
+```{r, echo=F, cache=F}
+redsub <- seqsubset[seqsubset %within% redrM]
+redsub[order(seqnames(redsub))]
+sum(width(redsub))
+```
+
+- ratio to initial coverage
+```{r, echo=F, cache=F}
+sum(width(redsub))/sum(width(seqsubset))
+```
+
+__SINE Sequence AluYa8__ 
+
+```{r, echo=F, cache=F}
+seqsubset <- rm[(elementMetadata(rm)[,1]==seq_sine)]
+seqsubset[order(seqnames(seqsubset))]
+sum(width(seqsubset))
+```
+
+- reduced intervals
+
+```{r, echo=F, cache=F}
+redr <- reduce(seqsubset, min.gapwidth=N+1L)
+redr
+sort(width(redr), decreasing=TRUE)
+sum(width(redr))
+```
+
+- reduced intervals shorter than or equal to 100Kb
+
+```{r, echo=F, cache=F}
+redrM <- redr[width(redr)<=M]
+redrM
+sort(width(redrM), decreasing=TRUE)
+sum(width(redrM))
+```
+
+- initial intervals located within reduced intervals
+
+```{r, echo=F, cache=F}
+redsub <- seqsubset[seqsubset %within% redrM]
+redsub[order(seqnames(redsub))]
+sum(width(redsub))
+```
+
+- ratio to initial coverage
+```{r, echo=F, cache=F}
+sum(width(redsub))/sum(width(seqsubset))
+```
+
+__DNA Transposon Sequence HSMAR1__
+
+```{r, echo=F, cache=F}
+seqsubset <- rm[(elementMetadata(rm)[,1]==seq_dna)]
+seqsubset[order(seqnames(seqsubset))]
+sum(width(seqsubset))
+```
+
+- reduced intervals
+
+```{r, echo=F, cache=F}
+redr <- reduce(seqsubset, min.gapwidth=N+1L)
+redr
+sort(width(redr), decreasing=TRUE)
+sum(width(redr))
+```
+
+- reduced intervals shorter than or equal to 100Kb
+
+```{r, echo=F, cache=F}
+redrM <- redr[width(redr)<=M]
+redrM
+sort(width(redrM), decreasing=TRUE)
+sum(width(redrM))
+```
+
+- initial intervals located within reduced intervals
+
+```{r, echo=F, cache=F}
+redsub <- seqsubset[seqsubset %within% redrM]
+redsub[order(seqnames(redsub))]
+sum(width(redsub))
+```
+
+- ratio to initial coverage
+```{r, echo=F, cache=F}
+sum(width(redsub))/sum(width(seqsubset))
+```
+
+__LTR Retrotransposon Sequence MER95__
+
+```{r, echo=F, cache=F}
+seqsubset <- rm[(elementMetadata(rm)[,1]==seq_ltr)]
+seqsubset[order(seqnames(seqsubset))]
+sum(width(seqsubset))
+```
+
+- reduced intervals
+
+```{r, echo=F, cache=F}
+redr <- reduce(seqsubset, min.gapwidth=N+1L)
+redr
+sort(width(redr), decreasing=TRUE)
+sum(width(redr))
+```
+
+- reduced intervals shorter than or equal to 100Kb
+
+```{r, echo=F, cache=F}
+redrM <- redr[width(redr)<=M]
+redrM
+sort(width(redrM), decreasing=TRUE)
+sum(width(redrM))
+```
+
+- initial intervals located within reduced intervals
+
+```{r, echo=F, cache=F}
+redsub <- seqsubset[seqsubset %within% redrM]
+redsub[order(seqnames(redsub))]
+sum(width(redsub))
+```
+
+- ratio to initial coverage
+```{r, echo=F, cache=F}
+sum(width(redsub))/sum(width(seqsubset))
+```
+
+__LINE Sequence UCON13__
+
+```{r, echo=F, cache=F}
+seqsubset <- rm[(elementMetadata(rm)[,1]==seq_line)]
+seqsubset[order(seqnames(seqsubset))]
+sum(width(seqsubset))
+```
+
+- reduced intervals
+
+```{r, echo=F, cache=F}
+redr <- reduce(seqsubset, min.gapwidth=N+1L)
+redr
+sort(width(redr), decreasing=TRUE)
+sum(width(redr))
+```
+
+- reduced intervals shorter than or equal to 100Kb
+
+```{r, echo=F, cache=F}
+redrM <- redr[width(redr)<=M]
+redrM
+sort(width(redrM), decreasing=TRUE)
+sum(width(redrM))
+```
+
+- initial intervals located within reduced intervals
+
+```{r, echo=F, cache=F}
+redsub <- seqsubset[seqsubset %within% redrM]
+redsub[order(seqnames(redsub))]
+sum(width(redsub))
+```
+
+- ratio to initial coverage
+```{r, echo=F, cache=F}
+sum(width(redsub))/sum(width(seqsubset))
 ```
 
 ###Session Info
