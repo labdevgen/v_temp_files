@@ -19,6 +19,8 @@ library(ggplot2)
 
 #max gap between repeats
 N <- 10^6
+#max interval length
+M <- 10^5
 ```
 
 UCSC RepeatMasker package
@@ -35,10 +37,11 @@ rm <- qh[[1]]
 rm
 ```
 
-Subsetting the data to include only chromosomes 1-22, X, Y
+Subsetting the data to include only chromosomes 1-22, X, Y; setting strands to *
 
-```{r, echo=F}
+```{r, echo=F, cache=T}
 seqlevels(rm, force=TRUE) <- paste0("chr", c(1:22, "X", "Y"))
+strand(rm) <- '*'
 rm
 ```
 
@@ -52,20 +55,26 @@ length(unique(rm$name))
 
 Coverage distribution
 
-```{r, echo=F}
+```{r, echo=F, cache=T}
 Y <- sapply(split(rm, rm$name), function(x) sum(width(x)))
+#sum(gr > 0)
 dy <- do.call(rbind, Map(data.frame, Y=Y))
 summary(dy)
 ```
 
+```{r, echo=F, cache=T}
+Y[Y==min(Y)]
+Y[Y==max(Y)]
+```
+
 Square root scale, red median, blue mean
-```{r, echo=F}
+```{r, echo=F, cache=T}
 ggplot(dy, aes(Y)) + geom_histogram(binwidth=100) + geom_vline(xintercept=median(Y), color='red') + scale_x_sqrt() + geom_vline(xintercept=mean(Y), color='blue')
 ```
 
 Repeat coverage by chromosome
 
-```{r, echo=F}
+```{r, echo=F, cache=T}
 cr <- sapply(split(rm, seqnames(rm)), function(x) sum(width(x)))
 dc <- do.call(rbind, Map(data.frame, Mb=cr/10^6))
 dc
@@ -121,10 +130,10 @@ red
 red[seqnames(red)=='chrY']
 ```
 
-__Number of gaps > N(1Mb) / Number of ranges after reduction__
+__Number of gaps(including flanks) > N(1Mb) / Number of ranges after reduction__
 
-```{r, echo=F}
-gaps <- sapply(cov_seq, function(x) sum(runLength(x)>N))
+```{r, echo=F, cache=T}
+gaps <- sum(runLength(cov_seq)[runValue(cov_seq)==0] > N)
 
 do.call(rbind, Map(data.frame, num.gaps=gaps, num.red.ranges=numredrep))
 ```
@@ -132,14 +141,15 @@ do.call(rbind, Map(data.frame, num.gaps=gaps, num.red.ranges=numredrep))
 Gaps on chromosome Y
 
 ```{r, echo=F}
-rl[rl>N]
+rl[runValue(cov_seq$chrY)==0 & rl>N]
+
 ```
 
-__Rle__
+__Rle coverage (after reduction)__
 
 - genome
 
-```{r, echo=F}
+```{r, echo=F, cache=T}
 red_cov <- coverage(red)
 red_cov
 ```
@@ -164,20 +174,25 @@ runLength(red_cov$chrX)
 
 ###Maximum Cluster Length 
 
-```{r, echo=F}
+```{r, echo=F, cache=T}
 X <- sapply(split(rm, rm$name), function(x) max(width(reduce(x, min.gapwidth=N+1L, ignore.strand=TRUE))))
 ```
 
 Distribution
-```{r, echo=F}
+```{r, echo=F, cache=T}
 dx <- do.call(rbind, Map(data.frame, X=X))
 summary(dx)
 ```
 
+```{r, echo=F, cache=T}
+X[X==min(X)]
+X[X==max(X)]
+```
+
 Square root scale, red median, blue mean
 
-```{r, echo=F}
-ggplot(dx, aes(X)) + geom_histogram(binwidth=100) + geom_vline(xintercept=median(X), color='red') + geom_vline(xintercept=mean(X), color='blue') + scale_x_sqrt()
+```{r, echo=F, cache=T}
+ggplot(dx, aes(X)) + geom_histogram(binwidth=150) + geom_vline(xintercept=median(X), color='red') + geom_vline(xintercept=mean(X), color='blue') + scale_x_sqrt()
 ```
 
 ###Maximum Cluster Length vs Total Coverage
@@ -189,13 +204,37 @@ head(df)
 
 
 ```{r, echo=F, cache=T}
-ggplot(df, aes(X/10^6, Y/10^6)) + geom_point(shape=1) + labs(x ='Max Cluster Length, Mb', y = 'Total Coverage, Mb')
+ggplot(df, aes(X/10^6, Y/10^6)) + geom_point(shape=1) + labs(x ='Max Cluster Length, Mb', y = 'Total Coverage, Mb') + geom_vline(xintercept=median(X)/10^6, color='red') + geom_hline(yintercept=median(Y)/10^6, color='red')
 ```
 
 log10 scale
 
 ```{r, echo=F, cache=T}
-ggplot(df, aes(X/10^6, Y/10^6)) + geom_point(shape=1) + scale_x_log10() + scale_y_log10() + labs(x ='Max Cluster Length, Mb (log10 scale)', y = 'Total Coverage, Mb (log10 scale)')
+ggplot(df, aes(X/10^6, Y/10^6)) + geom_point(shape=1) + scale_x_log10() + scale_y_log10() + labs(x ='Max Cluster Length, Mb (log10 scale)', y = 'Total Coverage, Mb (log10 scale)') + geom_vline(xintercept=log10(median(X)/10^6), color='red') + geom_hline(yintercept=log10(median(Y)/10^6+1), color='red')
+```
+
+###Total Genome within Clusters <= 100Kb Covered by Repeats (excluding gaps)
+
+Distribution
+
+```{r, echo=F, cache=T}
+Z <- sapply(split(rm, rm$name), function(x){
+  redr <- reduce(x, min.gapwidth=N+1L)
+  sum(width(x[x %within% redr[width(redr)<=M]]))
+  })
+dnz <- do.call(rbind, Map(data.frame, Z=Z))
+summary(dnz)
+```
+
+```{r, echo=F, cache=T}
+Z[Z==min(Z)]
+Z[Z==max(Z)]
+```
+
+Square root scale, red median, blue mean
+
+```{r, echo=F, cache=T}
+ggplot(dnz, aes(Z)) + geom_histogram(binwidth=25) + geom_vline(xintercept=median(Z), color='red') + geom_vline(xintercept=mean(Z), color='blue') + scale_x_sqrt()
 ```
 
 ###Session Info

@@ -67,24 +67,24 @@ UCSC RepeatMasker package
 ##   seqinfo: 93 sequences (1 circular) from hg19 genome
 ```
 
-Subsetting the data to include only chromosomes 1-22, X, Y
+Subsetting the data to include only chromosomes 1-22, X, Y; setting strands to *
 
 
 ```
 ## GRanges object with 5232237 ranges and 2 metadata columns:
 ##             seqnames               ranges strand |        name     score
 ##                <Rle>            <IRanges>  <Rle> | <character> <numeric>
-##         [1]     chr1 [16777161, 16777470]      + |       AluSp      2147
-##         [2]     chr1 [25165801, 25166089]      - |        AluY      2626
-##         [3]     chr1 [33553607, 33554646]      + |         L2b       626
-##         [4]     chr1 [50330064, 50332153]      + |      L1PA10     12545
-##         [5]     chr1 [58720068, 58720973]      - |       L1PA2      8050
+##         [1]     chr1 [16777161, 16777470]      * |       AluSp      2147
+##         [2]     chr1 [25165801, 25166089]      * |        AluY      2626
+##         [3]     chr1 [33553607, 33554646]      * |         L2b       626
+##         [4]     chr1 [50330064, 50332153]      * |      L1PA10     12545
+##         [5]     chr1 [58720068, 58720973]      * |       L1PA2      8050
 ##         ...      ...                  ...    ... .         ...       ...
-##   [5232233]    chr22 [51243195, 51243802]      - |        L1MC      1419
-##   [5232234]    chr22 [51243819, 51243924]      + |       LTR60       534
-##   [5232235]    chr22 [51244036, 51244339]      + |      AluYb8      2799
-##   [5232236]    chr22 [51244340, 51244456]      + |       LTR60       623
-##   [5232237]    chr22 [51244457, 51244541]      + |       LTR60       253
+##   [5232233]    chr22 [51243195, 51243802]      * |        L1MC      1419
+##   [5232234]    chr22 [51243819, 51243924]      * |       LTR60       534
+##   [5232235]    chr22 [51244036, 51244339]      * |      AluYb8      2799
+##   [5232236]    chr22 [51244340, 51244456]      * |       LTR60       623
+##   [5232237]    chr22 [51244457, 51244541]      * |       LTR60       253
 ##   -------
 ##   seqinfo: 24 sequences from hg19 genome
 ```
@@ -111,8 +111,19 @@ Coverage distribution
 ##  Max.   :42450549
 ```
 
+
+```
+## (CTTAG)n 
+##       23
+```
+
+```
+##      L2a 
+## 42450549
+```
+
 Square root scale, red median, blue mean
-![](Repeats_in_hg19_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
+![](Repeats_in_hg19_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
 
 Repeat coverage by chromosome
 
@@ -145,7 +156,7 @@ Repeat coverage by chromosome
 ## chrY   16.04321
 ```
 
-![](Repeats_in_hg19_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
+![](Repeats_in_hg19_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
 
 ###MADE1 repeat sequence 
 http://www.repeatmasker.org/cgi-bin/ViewRepeat?id=MADE1
@@ -156,17 +167,17 @@ http://www.repeatmasker.org/cgi-bin/ViewRepeat?id=MADE1
 ## GRanges object with 7794 ranges and 2 metadata columns:
 ##          seqnames               ranges strand |        name     score
 ##             <Rle>            <IRanges>  <Rle> | <character> <numeric>
-##      [1]     chr1   [4892439, 4892489]      + |       MADE1       284
-##      [2]     chr1   [4915157, 4915176]      - |       MADE1       244
-##      [3]     chr1   [4915201, 4915223]      - |       MADE1       244
-##      [4]     chr1   [4915524, 4915564]      - |       MADE1       244
-##      [5]     chr1   [4952138, 4952217]      - |       MADE1       552
+##      [1]     chr1   [4892439, 4892489]      * |       MADE1       284
+##      [2]     chr1   [4915157, 4915176]      * |       MADE1       244
+##      [3]     chr1   [4915201, 4915223]      * |       MADE1       244
+##      [4]     chr1   [4915524, 4915564]      * |       MADE1       244
+##      [5]     chr1   [4952138, 4952217]      * |       MADE1       552
 ##      ...      ...                  ...    ... .         ...       ...
-##   [7790]    chr22 [48039810, 48039854]      - |       MADE1       312
-##   [7791]    chr22 [48118232, 48118319]      + |       MADE1       488
-##   [7792]    chr22 [48241480, 48241549]      - |       MADE1       479
-##   [7793]    chr22 [49524958, 49525012]      + |       MADE1       249
-##   [7794]    chr22 [49525520, 49525561]      + |       MADE1       289
+##   [7790]    chr22 [48039810, 48039854]      * |       MADE1       312
+##   [7791]    chr22 [48118232, 48118319]      * |       MADE1       488
+##   [7792]    chr22 [48241480, 48241549]      * |       MADE1       479
+##   [7793]    chr22 [49524958, 49525012]      * |       MADE1       249
+##   [7794]    chr22 [49525520, 49525561]      * |       MADE1       289
 ##   -------
 ##   seqinfo: 24 sequences from hg19 genome
 ```
@@ -175,17 +186,17 @@ http://www.repeatmasker.org/cgi-bin/ViewRepeat?id=MADE1
 ## GRanges object with 52 ranges and 2 metadata columns:
 ##        seqnames               ranges strand |        name     score
 ##           <Rle>            <IRanges>  <Rle> | <character> <numeric>
-##    [1]     chrY   [ 564822,  564869]      - |       MADE1       263
-##    [2]     chrY   [ 736342,  736383]      - |       MADE1       263
-##    [3]     chrY   [1653556, 1653617]      - |       MADE1       281
-##    [4]     chrY   [1959698, 1959738]      + |       MADE1       250
-##    [5]     chrY   [1961109, 1961149]      + |       MADE1       256
+##    [1]     chrY   [ 564822,  564869]      * |       MADE1       263
+##    [2]     chrY   [ 736342,  736383]      * |       MADE1       263
+##    [3]     chrY   [1653556, 1653617]      * |       MADE1       281
+##    [4]     chrY   [1959698, 1959738]      * |       MADE1       250
+##    [5]     chrY   [1961109, 1961149]      * |       MADE1       256
 ##    ...      ...                  ...    ... .         ...       ...
-##   [48]     chrY [19491155, 19491199]      + |       MADE1       271
-##   [49]     chrY [19495503, 19495554]      + |       MADE1       302
-##   [50]     chrY [22605007, 22605091]      - |       MADE1       435
-##   [51]     chrY [22786367, 22786436]      + |       MADE1       271
-##   [52]     chrY [28557211, 28557293]      - |       MADE1       514
+##   [48]     chrY [19491155, 19491199]      * |       MADE1       271
+##   [49]     chrY [19495503, 19495554]      * |       MADE1       302
+##   [50]     chrY [22605007, 22605091]      * |       MADE1       435
+##   [51]     chrY [22786367, 22786436]      * |       MADE1       271
+##   [52]     chrY [28557211, 28557293]      * |       MADE1       514
 ##   -------
 ##   seqinfo: 24 sequences from hg19 genome
 ```
@@ -321,7 +332,7 @@ __Reduced ranges__
 ##   seqinfo: 24 sequences from hg19 genome
 ```
 
-__Number of gaps > N(1Mb) / Number of ranges after reduction__
+__Number of gaps(including flanks) > N(1Mb) / Number of ranges after reduction__
 
 
 ```
@@ -359,7 +370,7 @@ Gaps on chromosome Y
 ## [1]  1028623  6060479  3109452  5770774 30816273
 ```
 
-__Rle__
+__Rle coverage (after reduction)__
 
 - genome
 
@@ -459,9 +470,20 @@ Distribution
 ##  Max.   :147850439
 ```
 
+
+```
+## (CTTAG)n 
+##       23
+```
+
+```
+##     AluSx 
+## 147850439
+```
+
 Square root scale, red median, blue mean
 
-![](Repeats_in_hg19_files/figure-html/unnamed-chunk-21-1.png)<!-- -->
+![](Repeats_in_hg19_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
 
 ###Maximum Cluster Length vs Total Coverage
 
@@ -477,11 +499,41 @@ Square root scale, red median, blue mean
 ```
 
 
-![](Repeats_in_hg19_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
+![](Repeats_in_hg19_files/figure-html/unnamed-chunk-25-1.png)<!-- -->
 
 log10 scale
 
-![](Repeats_in_hg19_files/figure-html/unnamed-chunk-24-1.png)<!-- -->
+![](Repeats_in_hg19_files/figure-html/unnamed-chunk-26-1.png)<!-- -->
+
+###Total Genome within Clusters <= 100Kb Covered by Repeats (excluding gaps)
+
+Distribution
+
+
+```
+##        Z          
+##  Min.   :      0  
+##  1st Qu.:   6738  
+##  Median :  55203  
+##  Mean   : 111287  
+##  3rd Qu.: 151295  
+##  Max.   :2152984
+```
+
+
+```
+##   (TG)n AT_rich  AluSx1    AluY    L1M5     MIR 
+##       0       0       0       0       0       0
+```
+
+```
+## HERVH-int 
+##   2152984
+```
+
+Square root scale, red median, blue mean
+
+![](Repeats_in_hg19_files/figure-html/unnamed-chunk-29-1.png)<!-- -->
 
 ###Session Info
 
@@ -503,7 +555,7 @@ log10 scale
 ## [8] methods   base     
 ## 
 ## other attached packages:
-## [1] ggplot2_2.2.0        AnnotationHub_2.6.4  GenomicRanges_1.26.1
+## [1] ggplot2_2.2.1        AnnotationHub_2.6.4  GenomicRanges_1.26.1
 ## [4] GenomeInfoDb_1.10.1  IRanges_2.8.1        S4Vectors_0.12.1    
 ## [7] BiocGenerics_0.20.0 
 ## 
@@ -511,7 +563,7 @@ log10 scale
 ##  [1] Rcpp_0.12.8                   BiocInstaller_1.24.0         
 ##  [3] plyr_1.8.4                    XVector_0.14.0               
 ##  [5] tools_3.3.2                   zlibbioc_1.20.0              
-##  [7] digest_0.6.10                 RSQLite_1.1-1                
+##  [7] digest_0.6.11                 RSQLite_1.1-1                
 ##  [9] evaluate_0.10                 memoise_1.0.0                
 ## [11] tibble_1.2                    gtable_0.2.0                 
 ## [13] shiny_0.14.2                  DBI_0.5-1                    
@@ -520,11 +572,12 @@ log10 scale
 ## [19] rprojroot_1.1                 grid_3.3.2                   
 ## [21] Biobase_2.34.0                R6_2.2.0                     
 ## [23] AnnotationDbi_1.36.0          rmarkdown_1.3                
-## [25] magrittr_1.5                  backports_1.0.4              
-## [27] scales_0.4.1                  htmltools_0.3.5              
-## [29] assertthat_0.1                mime_0.5                     
-## [31] interactiveDisplayBase_1.12.0 xtable_1.8-2                 
-## [33] colorspace_1.3-2              httpuv_1.3.3                 
-## [35] labeling_0.3                  stringi_1.1.2                
-## [37] lazyeval_0.2.0                munsell_0.4.3
+## [25] magrittr_1.5                  codetools_0.2-15             
+## [27] backports_1.0.4               scales_0.4.1                 
+## [29] htmltools_0.3.5               assertthat_0.1               
+## [31] mime_0.5                      interactiveDisplayBase_1.12.0
+## [33] xtable_1.8-2                  colorspace_1.3-2             
+## [35] httpuv_1.3.3                  labeling_0.3                 
+## [37] stringi_1.1.2                 lazyeval_0.2.0               
+## [39] munsell_0.4.3
 ```
