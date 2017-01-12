@@ -459,6 +459,24 @@ sum(width(redsub))
 ```{r, echo=F, cache=F}
 sum(width(redsub))/sum(width(seqsubset))
 ```
+###Y/Z Ratio
+
+```{r, echo=F, cache=F}
+dyz <- do.call(rbind, Map(data.frame, total.coverage=Y, reduced.coverage=Z, ratio=round(Z/Y, digits=7)))
+head(dyz)
+```
+
+Ratio distribution
+
+```{r, echo=F, cache=F}
+summary(data.frame(dyz$ratio))
+```
+
+Red median, blue mean
+
+```{r, echo=F, cache=F}
+ggplot(dyz, aes(ratio)) + geom_histogram(binwidth=0.02) + geom_vline(xintercept=median(dyz$ratio), color='red') + geom_vline(xintercept=mean(dyz$ratio), color='blue')
+```
 
 ###Session Info
 

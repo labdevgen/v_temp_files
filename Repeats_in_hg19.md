@@ -1069,6 +1069,35 @@ __LINE Sequence UCON13__
 ```
 ## [1] 0.9666922
 ```
+###Y/Z Ratio
+
+
+```
+##          total.coverage reduced.coverage     ratio
+## (A)n             382541              610 0.0015946
+## (AAATG)n          65985            21391 0.3241797
+## (AACTG)n            341              341 1.0000000
+## (AAGTG)n           1803             1803 1.0000000
+## (AATAG)n          10436             9307 0.8918168
+## (AATTG)n           4265             4077 0.9559203
+```
+
+Ratio distribution
+
+
+```
+##    dyz.ratio     
+##  Min.   :0.0000  
+##  1st Qu.:0.3449  
+##  Median :0.6745  
+##  Mean   :0.5999  
+##  3rd Qu.:0.8628  
+##  Max.   :1.0000
+```
+
+Red median, blue mean
+
+![](Repeats_in_hg19_files/figure-html/unnamed-chunk-59-1.png)<!-- -->
 
 ###Session Info
 
