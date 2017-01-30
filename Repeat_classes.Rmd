@@ -1,0 +1,234 @@
+---
+title: "Repeat Classes"
+author: "Ronica K"
+output: 
+  html_document:
+    keep_md: true
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(fig.width=8, dpi=300, echo=F, warning=F, message=F, cache=T)
+```
+
+
+```{r cache=F}
+library(ggplot2); library(ggbio); library(RColorBrewer) 
+library(reshape2); library(MASS); library(e1071)
+```
+
+__UCSC RepeatMasker GRanges__
+
+```{r}
+source('D:/R Directory/Bioconductor/txtToGR.R')
+
+hg19gr
+```
+
+__Repeats across chromosomes__
+
+```{r}
+classColourCount <- length(unique(hg19gr$class))
+
+autoplot(hg19gr, aes(colour=class, fill=class), layout='karyogram') +
+  scale_fill_manual(values=colorRampPalette(brewer.pal(8, 'Dark2'))(classColourCount)) +
+  scale_color_manual(values=colorRampPalette(brewer.pal(8, 'Dark2'))(classColourCount))
+```
+
+__Repeats on chromosome Y__
+
+```{r}
+autoplot(hg19gr, chr='chrY', aes(colour=strand, fill=strand, group=class), group.selfish=T) +
+  scale_fill_brewer(palette='Dark2') + scale_color_brewer(palette='Dark2')
+```
+
+```{r}
+autoplot(hg19gr, chr='chrY', aes(colour=strand, fill=strand, group=class), group.selfish=T) + 
+  xlim(c(58800000, 59400000)) +
+  scale_fill_brewer(palette='Dark2') + scale_color_brewer(palette='Dark2')
+```
+
+__Overlaps between repeat classes__
+
+```{r}
+classOverlaps <- function(gr, classes){
+  iv <- vector(); jv <- vector(); ov <- vector()
+  for(i in 1:(length(classes)-1)){
+    for(j in (i+1):length(classes)){
+      iClass <- classes[i]
+      jClass <- classes[j]
+      iSub <-subset(gr, class==iClass)
+      jSub <- subset(gr, class==jClass)
+      overlaps <- length(subsetByOverlaps(iSub, jSub))
+      if(overlaps>0){iv <- c(iv, iClass); jv <- c(jv, jClass); ov <- c(ov, overlaps)}
+    }
+  }
+  return(data.frame(class1=iv, class2=jv, num.overlaps=ov))
+}
+
+overlapsDF <- classOverlaps(hg19gr, unique(hg19gr$class))
+
+overlapsDF
+```
+
+###Repeats
+
+```{r}
+classLength <- data.frame(chr=seqnames(hg19gr), length=width(hg19gr), 
+                          class=hg19gr$class, family=hg19gr$family)
+
+#number of repeats by class
+numrep <- sapply(split(classLength, classLength$class), function(x) nrow(x))
+#genome covered by class
+covrep <- sapply(split(classLength, classLength$class), function(x) sum(x$length))
+
+do.call(rbind, Map(data.frame, num.ranges=numrep, genome.covered.Mb=covrep/10^6))
+```
+
+__Length distribution__
+
+```{r}
+summary(classLength['length'])
+```
+
+__Max length__
+
+```{r}
+hg19gr[width(hg19gr)==160602.0]
+```
+
+__Square root axes, red median__
+
+```{r}
+ggplot(classLength, aes(x=length/10^3)) + geom_histogram(binwidth=0.1, colour='white') + 
+  scale_x_continuous(trans='sqrt', name='length, Kb') + scale_y_continuous(trans='sqrt') +
+  geom_vline(xintercept=median(classLength$length/10^3), color='red')
+
+#skewness(sqrt(classLength$length))  
+
+```
+
+__Length distribution by class__
+
+```{r}
+sapply(split(classLength, classLength$class), function(x) summary(x$length))
+```
+
+
+```{r}
+class.by.median <- with(classLength, reorder(class, -length, median))
+
+ggplot(classLength, aes(class.by.median, log(length))) + 
+  geom_jitter(aes(colour=class), alpha=0.15, position=position_jitter(width = .35)) + 
+  geom_boxplot(alpha=0) + scale_y_continuous(name='log(length)') + 
+  scale_color_manual(values=colorRampPalette(brewer.pal(8, 'Dark2'))(classColourCount)) +
+  theme(legend.position="none")
+```
+
+
+```{r fig.height=4.1}
+ggplot(classLength[classLength$class %in% c('LTR','LINE','Simple_repeat'),], 
+       aes(x=log(length))) + 
+  geom_histogram(binwidth=0.085, colour='white') + 
+  facet_grid(class ~ ., scales='free_y') +
+  scale_y_continuous(trans='sqrt', name='sqrt(count)') 
+```
+
+
+```{r fig.height=4.1}
+ggplot(classLength[classLength$class %in% c('DNA','rRNA','Other'),], 
+       aes(x=log(length))) + 
+  geom_histogram(binwidth=0.05, colour='white') + 
+  facet_grid(class ~ ., scales='free_y') +
+  scale_y_continuous(trans='sqrt', name='sqrt(count)') 
+
+```
+
+
+```{r fig.height=7.7}
+ggplot(classLength[classLength$class %in% 
+                     c('SINE', 'snRNA', 'tRNA', 'srpRNA', 'scRNA','RNA'),], 
+       aes(x=log(length))) + 
+  geom_histogram(binwidth=0.035, colour='white') + 
+  facet_grid(class ~ ., scales='free_y') +
+  scale_y_continuous(trans='sqrt', name='sqrt(count)')
+```
+
+__Length distribution by class and chromosome__
+
+```{r}
+repByChr <- as.data.frame(sapply(split(classLength, classLength$class), 
+                                 function(x) sapply(split(x, x$chr), 
+                                                    function(y) sum(y$length))))
+repByChr
+```
+
+
+```{r}
+repByChr$chr <- rownames(repByChr)
+meltedRep <- melt(repByChr, id.vars='chr')
+rnaNames <- grep('RNA', unique(classLength$class), value=T)
+levels(meltedRep$variable)[13] <- 'RNA_repeat' 
+meltedRep$variable[grepl(paste0(rnaNames, collapse='|'), meltedRep$variable)] <- 'RNA_repeat'
+
+meltedRep <- transform(meltedRep, 
+                       variable=factor(variable, 
+                                       levels=c('RNA_repeat', 'Other', 'Simple_repeat',
+                                                'DNA', 'LTR', 'SINE', 'LINE')))
+
+ggplot(meltedRep, aes(x=chr, y=sqrt(value), fill=variable)) + 
+  geom_bar(stat='identity') + labs(x='chromosome', y='sqrt(genome covered)') + 
+  scale_x_discrete(limits=paste0('chr', c(1:22, 'X', 'Y'))) +
+  theme(axis.text.x=element_text(angle = 30)) + 
+  scale_fill_brewer(palette='Dark2', name='class')
+```
+
+###Gaps
+
+```{r}
+hg19NoStrand <- hg19gr
+strand(hg19NoStrand) <- '*'
+```
+
+__Gap length distribution (no flanks)__
+
+```{r}
+gapByClassLength <- do.call(
+  "rbind", lapply(split(hg19NoStrand, hg19NoStrand$class), function(x){
+    class <- unique(x$class)[1]
+    starts <- min(start(split(x, seqnames(x))))
+    ends <- max(end(split(x, seqnames(x))))
+    gr <- gaps(x, start=starts, end=ends)
+    gr <- gr[strand(gr)=='*']
+    data.frame(chr=seqnames(gr), length=width(gr), class=class)
+  }))
+
+summary(gapByClassLength['length'])
+```
+
+__Square root axes, red median__
+
+```{r}
+ggplot(gapByClassLength, aes(x=length/10^3)) + geom_histogram(binwidth=1.25, colour='white') + 
+  scale_x_continuous(trans='sqrt', name='gap length, Kb') + scale_y_continuous(trans='sqrt') +
+  geom_vline(xintercept=median(gapByClassLength$length/10^3), color='red')
+
+#skewness(log(gapByClassLength$length)) 
+
+sapply(split(gapByClassLength, gapByClassLength$class), function(x) summary(x$length))
+```
+
+
+```{r}
+gap.class.by.median <- with(gapByClassLength, reorder(class, -length, median))
+
+ggplot(gapByClassLength, aes(gap.class.by.median, log(length))) + 
+  geom_jitter(aes(colour=class), alpha=0.15, position=position_jitter(width = .35)) + 
+  geom_boxplot(alpha=0) + scale_y_continuous(name='log(length)') + 
+  scale_color_manual(values=colorRampPalette(brewer.pal(8, 'Dark2'))(classColourCount)) +
+  theme(legend.position="none")
+```
+
+
+```{r fig.height=14.9}
+ggplot(gapByClassLength, aes(x=log(length))) + geom_histogram(binwidth=0.15, colour='white') + 
+  facet_grid(class ~ ., scales='free_y') + scale_y_continuous(trans='sqrt')
+```
