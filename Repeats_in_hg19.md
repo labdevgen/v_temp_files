@@ -2,17 +2,12 @@
 Ronica K  
 
 
-
 ###Loading/cleaning
 
 
 
-UCSC RepeatMasker package
+__UCSC RepeatMasker package__
 
-
-```
-## snapshotDate(): 2016-10-11
-```
 
 ```
 ## AnnotationHub with 1 record
@@ -67,7 +62,7 @@ UCSC RepeatMasker package
 ##   seqinfo: 93 sequences (1 circular) from hg19 genome
 ```
 
-Subsetting the data to include only chromosomes 1-22, X, Y; setting strands to *
+__Subsetting the data to include only chromosomes 1-22, X, Y; setting strands to \*__
 
 
 ```
@@ -89,7 +84,7 @@ Subsetting the data to include only chromosomes 1-22, X, Y; setting strands to *
 ##   seqinfo: 24 sequences from hg19 genome
 ```
 
-Number of unique repeat sequences
+__Number of unique repeat sequences__
 
 
 ```
@@ -98,7 +93,7 @@ Number of unique repeat sequences
 
 ###Repeat coverage
 
-Coverage distribution
+__Coverage distribution__
 
 
 ```
@@ -122,10 +117,11 @@ Coverage distribution
 ## 42450549
 ```
 
-Square root scale, red median, blue mean
+__Square root scale, red median, blue mean__
+
 ![](Repeats_in_hg19_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
 
-Repeat coverage by chromosome
+__Repeat coverage by chromosome__
 
 
 ```
@@ -192,7 +188,8 @@ Repeat coverage by chromosome
 
 
 
-Distribution
+__Distribution__
+
 
 ```
 ##        X            
@@ -215,7 +212,7 @@ Distribution
 ## 147850439
 ```
 
-Square root scale, red median, blue mean
+__Square root scale, red median, blue mean__
 
 ![](Repeats_in_hg19_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
 
@@ -235,13 +232,13 @@ Square root scale, red median, blue mean
 
 ![](Repeats_in_hg19_files/figure-html/unnamed-chunk-25-1.png)<!-- -->
 
-log10 scale
+__log10 scale__
 
 ![](Repeats_in_hg19_files/figure-html/unnamed-chunk-26-1.png)<!-- -->
 
 ###Total Genome within Clusters <= 100Kb Covered by Repeats (excluding gaps)
 
-Distribution
+__Distribution__
 
 
 ```
@@ -265,11 +262,12 @@ Distribution
 ##   2152984
 ```
 
-Square root scale, red median, blue mean
+__Square root scale, red median, blue mean__
 
 ![](Repeats_in_hg19_files/figure-html/unnamed-chunk-29-1.png)<!-- -->
 
-Coverage
+__Coverage__
+
 
 ```
 ## [1] 155245309
@@ -1082,7 +1080,7 @@ __LINE Sequence UCON13__
 ## (AATTG)n           4265             4077 0.9559203
 ```
 
-Ratio distribution
+__Ratio distribution__
 
 
 ```
@@ -1095,52 +1093,6 @@ Ratio distribution
 ##  Max.   :1.0000
 ```
 
-Red median, blue mean
+__Red median, blue mean__
 
 ![](Repeats_in_hg19_files/figure-html/unnamed-chunk-59-1.png)<!-- -->
-
-###Session Info
-
-
-```
-## R version 3.3.2 (2016-10-31)
-## Platform: x86_64-w64-mingw32/x64 (64-bit)
-## Running under: Windows 7 x64 (build 7601) Service Pack 1
-## 
-## locale:
-## [1] LC_COLLATE=English_United States.1252 
-## [2] LC_CTYPE=English_United States.1252   
-## [3] LC_MONETARY=English_United States.1252
-## [4] LC_NUMERIC=C                          
-## [5] LC_TIME=English_United States.1252    
-## 
-## attached base packages:
-## [1] parallel  stats4    stats     graphics  grDevices utils     datasets 
-## [8] methods   base     
-## 
-## other attached packages:
-## [1] ggplot2_2.2.1        AnnotationHub_2.6.4  GenomicRanges_1.26.1
-## [4] GenomeInfoDb_1.10.1  IRanges_2.8.1        S4Vectors_0.12.1    
-## [7] BiocGenerics_0.20.0 
-## 
-## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.8                   BiocInstaller_1.24.0         
-##  [3] plyr_1.8.4                    XVector_0.14.0               
-##  [5] tools_3.3.2                   zlibbioc_1.20.0              
-##  [7] digest_0.6.11                 RSQLite_1.1-1                
-##  [9] evaluate_0.10                 memoise_1.0.0                
-## [11] tibble_1.2                    gtable_0.2.0                 
-## [13] shiny_0.14.2                  DBI_0.5-1                    
-## [15] yaml_2.1.14                   httr_1.2.1                   
-## [17] stringr_1.1.0                 knitr_1.15.1                 
-## [19] rprojroot_1.1                 grid_3.3.2                   
-## [21] Biobase_2.34.0                R6_2.2.0                     
-## [23] AnnotationDbi_1.36.0          rmarkdown_1.3                
-## [25] magrittr_1.5                  backports_1.0.4              
-## [27] scales_0.4.1                  htmltools_0.3.5              
-## [29] assertthat_0.1                mime_0.5                     
-## [31] interactiveDisplayBase_1.12.0 xtable_1.8-2                 
-## [33] colorspace_1.3-2              httpuv_1.3.3                 
-## [35] labeling_0.3                  stringi_1.1.2                
-## [37] lazyeval_0.2.0                munsell_0.4.3
-```

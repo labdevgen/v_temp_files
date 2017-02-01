@@ -3,5 +3,5 @@ rm hg19
 
 __ToDo__
 
-- Analysis of Variance?
+- Mouse genome
 

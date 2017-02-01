@@ -5,14 +5,13 @@ output:
   html_document:
     keep_md: true
 ---
-
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = F)
+knitr::opts_chunk$set(fig.width=8, dpi=300, echo=F, warning=F, message=F, cache=T)
 ```
 
 ###Loading/cleaning
 
-```{r, echo=F, message=F, warning=F}
+```{r cache=F}
 library(GenomicRanges)
 library(AnnotationHub)
 library(ggplot2)
@@ -23,57 +22,58 @@ N <- 10^6
 M <- 10^5
 ```
 
-UCSC RepeatMasker package
+__UCSC RepeatMasker package__
 
-```{r, echo=F, cache=T}
+```{r}
 ah <- AnnotationHub()
 hh <- subset(ah, species=='Homo sapiens' & genome=='hg19')
 qh <- query(hh, 'RepeatMasker')
 qh
 ```
 
-```{r, echo=F, cache=T, message=F, warning=F}
+```{r}
 rm <- qh[[1]]
 rm
 ```
 
-Subsetting the data to include only chromosomes 1-22, X, Y; setting strands to *
+__Subsetting the data to include only chromosomes 1-22, X, Y; setting strands to \*__
 
-```{r, echo=F, cache=T}
-seqlevels(rm, force=TRUE) <- paste0("chr", c(1:22, "X", "Y"))
+```{r}
+seqlevels(rm, force=TRUE) <- paste0('chr', c(1:22, 'X', 'Y'))
 strand(rm) <- '*'
 rm
 ```
 
-Number of unique repeat sequences
+__Number of unique repeat sequences__
 
-```{r, echo=F}
+```{r}
 length(unique(rm$name))
 ```
 
 ###Repeat coverage
 
-Coverage distribution
+__Coverage distribution__
 
-```{r, echo=F, cache=T}
+```{r}
 Y <- sapply(split(rm, rm$name), function(x) sum(width(x)))
 dy <- do.call(rbind, Map(data.frame, Y=Y))
 summary(dy)
 ```
 
-```{r, echo=F, cache=T}
+```{r}
 Y[Y==min(Y)]
 Y[Y==max(Y)]
 ```
 
-Square root scale, red median, blue mean
-```{r, echo=F, cache=F}
+__Square root scale, red median, blue mean__
+
+```{r}
 ggplot(dy, aes(Y)) + geom_histogram(binwidth=100) + geom_vline(xintercept=median(Y), color='red') + scale_x_sqrt() + geom_vline(xintercept=mean(Y), color='blue')
 ```
 
-Repeat coverage by chromosome
+__Repeat coverage by chromosome__
 
-```{r, echo=F, cache=F}
+```{r}
 cr <- sapply(split(rm, seqnames(rm)), function(x) sum(width(x)))
 dc <- do.call(rbind, Map(data.frame, Mb=cr/10^6))
 dc
@@ -149,7 +149,7 @@ rl[runValue(cov_seq$chrY)==0 & rl>N]
 ```
 
 
-```{r, eval=F, cache=T, include=F}
+```{r, eval=F, include=F}
 
 #__Rle coverage (after reduction)__
 
@@ -160,7 +160,7 @@ red_cov
 ```
 
 
-```{r, eval=F, echo=F, include=F}
+```{r, eval=F, include=F}
 #- chromosome Y
 
 red_cov$chrY
@@ -168,7 +168,7 @@ runLength(red_cov$chrY)
 ```
 
 
-```{r, eval=F, echo=F, include=F}
+```{r, eval=F, include=F}
 #__Max MADE1 cluster__
 
 max(width(red))
@@ -181,50 +181,51 @@ runLength(red_cov$chrX)
 
 ###Maximum Cluster Length 
 
-```{r, echo=F, cache=T}
+```{r}
 X <- sapply(split(rm, rm$name), function(x) max(width(reduce(x, min.gapwidth=N+1L, ignore.strand=TRUE))))
 ```
 
-Distribution
-```{r, echo=F, cache=T}
+__Distribution__
+
+```{r}
 dx <- do.call(rbind, Map(data.frame, X=X))
 summary(dx)
 ```
 
-```{r, echo=F, cache=T}
+```{r}
 X[X==min(X)]
 X[X==max(X)]
 ```
 
-Square root scale, red median, blue mean
+__Square root scale, red median, blue mean__
 
-```{r, echo=F, cache=F}
+```{r}
 ggplot(dx, aes(X)) + geom_histogram(binwidth=150) + geom_vline(xintercept=median(X), color='red') + geom_vline(xintercept=mean(X), color='blue') + scale_x_sqrt()
 ```
 
 ###Maximum Cluster Length vs Total Coverage
 
-```{r, echo=F}
+```{r}
 df <- do.call(rbind, Map(data.frame, X=X, Y=Y))
 head(df)
 ```
 
 
-```{r, echo=F, cache=F}
+```{r}
 ggplot(df, aes(X/10^6, Y/10^6)) + geom_point(shape=1) + labs(x ='Max Cluster Length, Mb', y = 'Total Coverage, Mb') + geom_vline(xintercept=median(X)/10^6, color='red') + geom_hline(yintercept=median(Y)/10^6, color='red')
 ```
 
-log10 scale
+__log10 scale__
 
-```{r, echo=F, cache=F}
+```{r}
 ggplot(df, aes(X/10^6, Y/10^6)) + geom_point(shape=1) + scale_x_log10() + scale_y_log10() + labs(x ='Max Cluster Length, Mb (log10 scale)', y = 'Total Coverage, Mb (log10 scale)') + geom_vline(xintercept=log10(median(X)/10^6), color='red') + geom_hline(yintercept=log10(median(Y)/10^6+1), color='red')
 ```
 
 ###Total Genome within Clusters <= 100Kb Covered by Repeats (excluding gaps)
 
-Distribution
+__Distribution__
 
-```{r, echo=F, cache=T}
+```{r}
 Z <- sapply(split(rm, rm$name), function(x){
   redr <- reduce(x, min.gapwidth=N+1L)
   sum(width(x[x %within% redr[width(redr)<=M]]))
@@ -233,19 +234,20 @@ dnz <- do.call(rbind, Map(data.frame, Z=Z))
 summary(dnz)
 ```
 
-```{r, echo=F, cache=T}
+```{r}
 Z[Z==min(Z)]
 Z[Z==max(Z)]
 ```
 
-Square root scale, red median, blue mean
+__Square root scale, red median, blue mean__
 
-```{r, echo=F, cache=F}
+```{r}
 ggplot(dnz, aes(Z)) + geom_histogram(binwidth=25) + geom_vline(xintercept=median(Z), color='red') + geom_vline(xintercept=mean(Z), color='blue') + scale_x_sqrt()
 ```
 
-Coverage
-```{r, echo=F, cache=T}
+__Coverage__
+
+```{r}
 sum(Z)
 ```
 
@@ -257,7 +259,7 @@ sum(Z)
 - LTR retrotransposon MER95 (http://www.repeatmasker.org/cgi-bin/ViewRepeat?id=MER95)
 - LINE UCON13 (http://www.repeatmasker.org/cgi-bin/ViewRepeat?id=UCON13)
 
-```{r, echo=F, cache=T}
+```{r}
 seq_simple <- 'SATR1' #Simple Repeat
 seq_sine <- 'AluYa8' #SINE
 seq_dna <- 'HSMAR1' #DNA transposon
@@ -267,7 +269,7 @@ seq_line <- 'UCON13' #LINE
 
 __Simple Repeat Sequence SATR1__
 
-```{r, echo=F, cache=F}
+```{r}
 seqsubset <- rm[(elementMetadata(rm)[,1]==seq_simple)]
 seqsubset[order(seqnames(seqsubset))]
 sum(width(seqsubset))
@@ -275,7 +277,7 @@ sum(width(seqsubset))
 
 - reduced intervals
 
-```{r, echo=F, cache=F}
+```{r}
 redr <- reduce(seqsubset, min.gapwidth=N+1L)
 redr
 sort(width(redr), decreasing=TRUE)
@@ -284,7 +286,7 @@ sum(width(redr))
 
 - reduced intervals shorter than or equal to 100Kb
 
-```{r, echo=F, cache=F}
+```{r}
 redrM <- redr[width(redr)<=M]
 redrM
 sort(width(redrM), decreasing=TRUE)
@@ -293,20 +295,20 @@ sum(width(redrM))
 
 - initial intervals located within reduced intervals
 
-```{r, echo=F, cache=F}
+```{r}
 redsub <- seqsubset[seqsubset %within% redrM]
 redsub[order(seqnames(redsub))]
 sum(width(redsub))
 ```
 
 - ratio to initial coverage
-```{r, echo=F, cache=F}
+```{r}
 sum(width(redsub))/sum(width(seqsubset))
 ```
 
 __SINE Sequence AluYa8__ 
 
-```{r, echo=F, cache=F}
+```{r}
 seqsubset <- rm[(elementMetadata(rm)[,1]==seq_sine)]
 seqsubset[order(seqnames(seqsubset))]
 sum(width(seqsubset))
@@ -314,7 +316,7 @@ sum(width(seqsubset))
 
 - reduced intervals
 
-```{r, echo=F, cache=F}
+```{r}
 redr <- reduce(seqsubset, min.gapwidth=N+1L)
 redr
 sort(width(redr), decreasing=TRUE)
@@ -323,7 +325,7 @@ sum(width(redr))
 
 - reduced intervals shorter than or equal to 100Kb
 
-```{r, echo=F, cache=F}
+```{r}
 redrM <- redr[width(redr)<=M]
 redrM
 sort(width(redrM), decreasing=TRUE)
@@ -332,20 +334,20 @@ sum(width(redrM))
 
 - initial intervals located within reduced intervals
 
-```{r, echo=F, cache=F}
+```{r}
 redsub <- seqsubset[seqsubset %within% redrM]
 redsub[order(seqnames(redsub))]
 sum(width(redsub))
 ```
 
 - ratio to initial coverage
-```{r, echo=F, cache=F}
+```{r}
 sum(width(redsub))/sum(width(seqsubset))
 ```
 
 __DNA Transposon Sequence HSMAR1__
 
-```{r, echo=F, cache=F}
+```{r}
 seqsubset <- rm[(elementMetadata(rm)[,1]==seq_dna)]
 seqsubset[order(seqnames(seqsubset))]
 sum(width(seqsubset))
@@ -353,7 +355,7 @@ sum(width(seqsubset))
 
 - reduced intervals
 
-```{r, echo=F, cache=F}
+```{r}
 redr <- reduce(seqsubset, min.gapwidth=N+1L)
 redr
 sort(width(redr), decreasing=TRUE)
@@ -362,7 +364,7 @@ sum(width(redr))
 
 - reduced intervals shorter than or equal to 100Kb
 
-```{r, echo=F, cache=F}
+```{r}
 redrM <- redr[width(redr)<=M]
 redrM
 sort(width(redrM), decreasing=TRUE)
@@ -371,20 +373,20 @@ sum(width(redrM))
 
 - initial intervals located within reduced intervals
 
-```{r, echo=F, cache=F}
+```{r}
 redsub <- seqsubset[seqsubset %within% redrM]
 redsub[order(seqnames(redsub))]
 sum(width(redsub))
 ```
 
 - ratio to initial coverage
-```{r, echo=F, cache=F}
+```{r}
 sum(width(redsub))/sum(width(seqsubset))
 ```
 
 __LTR Retrotransposon Sequence MER95__
 
-```{r, echo=F, cache=F}
+```{r}
 seqsubset <- rm[(elementMetadata(rm)[,1]==seq_ltr)]
 seqsubset[order(seqnames(seqsubset))]
 sum(width(seqsubset))
@@ -392,7 +394,7 @@ sum(width(seqsubset))
 
 - reduced intervals
 
-```{r, echo=F, cache=F}
+```{r}
 redr <- reduce(seqsubset, min.gapwidth=N+1L)
 redr
 sort(width(redr), decreasing=TRUE)
@@ -401,7 +403,7 @@ sum(width(redr))
 
 - reduced intervals shorter than or equal to 100Kb
 
-```{r, echo=F, cache=F}
+```{r}
 redrM <- redr[width(redr)<=M]
 redrM
 sort(width(redrM), decreasing=TRUE)
@@ -410,20 +412,20 @@ sum(width(redrM))
 
 - initial intervals located within reduced intervals
 
-```{r, echo=F, cache=F}
+```{r}
 redsub <- seqsubset[seqsubset %within% redrM]
 redsub[order(seqnames(redsub))]
 sum(width(redsub))
 ```
 
 - ratio to initial coverage
-```{r, echo=F, cache=F}
+```{r}
 sum(width(redsub))/sum(width(seqsubset))
 ```
 
 __LINE Sequence UCON13__
 
-```{r, echo=F, cache=F}
+```{r}
 seqsubset <- rm[(elementMetadata(rm)[,1]==seq_line)]
 seqsubset[order(seqnames(seqsubset))]
 sum(width(seqsubset))
@@ -431,7 +433,7 @@ sum(width(seqsubset))
 
 - reduced intervals
 
-```{r, echo=F, cache=F}
+```{r}
 redr <- reduce(seqsubset, min.gapwidth=N+1L)
 redr
 sort(width(redr), decreasing=TRUE)
@@ -440,7 +442,7 @@ sum(width(redr))
 
 - reduced intervals shorter than or equal to 100Kb
 
-```{r, echo=F, cache=F}
+```{r}
 redrM <- redr[width(redr)<=M]
 redrM
 sort(width(redrM), decreasing=TRUE)
@@ -449,38 +451,31 @@ sum(width(redrM))
 
 - initial intervals located within reduced intervals
 
-```{r, echo=F, cache=F}
+```{r}
 redsub <- seqsubset[seqsubset %within% redrM]
 redsub[order(seqnames(redsub))]
 sum(width(redsub))
 ```
 
 - ratio to initial coverage
-```{r, echo=F, cache=F}
+```{r}
 sum(width(redsub))/sum(width(seqsubset))
 ```
 ###Y/Z Ratio
 
-```{r, echo=F, cache=F}
+```{r}
 dyz <- do.call(rbind, Map(data.frame, total.coverage=Y, reduced.coverage=Z, ratio=round(Z/Y, digits=7)))
 head(dyz)
 ```
 
-Ratio distribution
+__Ratio distribution__
 
-```{r, echo=F, cache=F}
+```{r}
 summary(data.frame(dyz$ratio))
 ```
 
-Red median, blue mean
+__Red median, blue mean__
 
-```{r, echo=F, cache=F}
+```{r}
 ggplot(dyz, aes(ratio)) + geom_histogram(binwidth=0.02) + geom_vline(xintercept=median(dyz$ratio), color='red') + geom_vline(xintercept=mean(dyz$ratio), color='blue')
-```
-
-###Session Info
-
-```{r, echo=F}
-sessionInfo()
-
 ```
