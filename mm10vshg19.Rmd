@@ -1,0 +1,166 @@
+---
+title: "Mouse vs Human"
+author: "Ronica K"
+output: 
+  html_document:
+    keep_md: true
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(fig.width=8, dpi=300, echo=F, warning=F, message=F, cache=T)
+```
+
+
+```{r cache=F}
+library(ggplot2); library(ggbio); library(RColorBrewer) 
+library(reshape2); library(MASS); library(e1071)
+```
+
+###Mouse genome
+
+__UCSC RepeatMasker Track__
+
+```{r}
+source('./txtToGR.R')
+
+#Human genome
+seqlengths <- c(249250621, 243199373, 198022430, 191154276, 180915260,
+             171115067, 159138663, 146364022, 141213431, 135534747,
+             135006516, 133851895, 115169878, 107349540, 102531392,
+             90354753, 81195210,  78077248,  59128983,  63025520,
+             48129895,  51304566, 155270560, 59373566)
+hg19gr <- wrapper('./hg19rmsk.txt.gz', 'hg19', paste0('chr', c(1:22, 'X', 'Y')), seqlengths)
+
+#Mouse genome
+seqlengths <- c(195471971, 182113224, 160039680, 156508116, 151834684, 
+                149736546, 145441459, 129401213, 124595110, 130694993, 
+                122082543, 120129022, 120421639, 124902244, 104043685, 
+                98207768, 94987271, 90702639, 61431566, 171031299, 91744698)
+mm10gr <- wrapper('./mm10rmsk.txt.gz', 'mm10', paste0('chr', c(1:19, 'X', 'Y')), seqlengths)
+
+
+mm10gr
+```
+
+__Number of unique repeat sequences__
+
+```{r}
+length(unique(mm10gr$name))
+```
+
+```{r}
+classColourCount <- length(unique(mm10gr$class))
+```
+
+###Repeats
+
+```{r}
+hg19classLength <- data.frame(chr=seqnames(hg19gr), length=width(hg19gr), 
+                          class=hg19gr$class, family=hg19gr$family, genome='hg19')
+mm10classLength <- data.frame(chr=seqnames(mm10gr), length=width(mm10gr), 
+                          class=mm10gr$class, family=mm10gr$family, genome='mm10')
+
+classLength <- rbind(hg19classLength, mm10classLength)
+
+summary(hg19classLength)
+summary(mm10classLength)
+```
+
+__Number of repeats by class__
+
+```{r}
+numrep <- sapply(split(classLength, classLength$genome), 
+                 function(x) sapply(split(x, x$class), function(y) nrow(y)))
+numrep
+```
+
+__Genome covered by class__
+
+```{r}
+covrep <- sapply(split(classLength, classLength$genome), 
+                 function(x) sapply(split(x, x$class), function(y) sum(y$length)))
+covrep
+```
+
+__Length by species__
+
+```{r fig.height=3.5}
+ggplot(classLength, aes(genome, log(length), fill=genome)) + geom_boxplot() +
+    theme(legend.position='none') + coord_flip() + scale_fill_brewer(palette='Dark2')
+```
+
+
+__Length by class__
+
+__in mouse__
+
+```{r}
+sapply(split(mm10classLength, mm10classLength$class), function(x) summary(x$length))
+```
+
+
+```{r}
+ggplot(classLength, aes(genome, log(length))) + 
+  geom_jitter(aes(colour=genome), alpha=0.05, position=position_jitter(width = .35)) + 
+  geom_boxplot(alpha=0) + scale_y_continuous(name='log(length)') + 
+  theme(legend.position='none') + scale_color_brewer(palette='Dark2') +
+  facet_grid(.~class)
+```
+
+###Gaps
+
+```{r}
+hg19NoStrand <- hg19gr
+strand(hg19NoStrand) <- '*'
+
+mm10NoStrand <- mm10gr
+strand(mm10NoStrand) <- '*'
+
+hg19GapByClassLength <- do.call(
+  'rbind', lapply(split(hg19NoStrand, hg19NoStrand$class), function(x){
+    class <- unique(x$class)[1]
+    starts <- min(start(split(x, seqnames(x))))
+    ends <- max(end(split(x, seqnames(x))))
+    gr <- gaps(x, start=starts, end=ends)
+    gr <- gr[strand(gr)=='*']
+    data.frame(chr=seqnames(gr), length=width(gr), class=class, genome='hg19')
+  }))
+
+mm10GapByClassLength <- do.call(
+  'rbind', lapply(split(mm10NoStrand, mm10NoStrand$class), function(x){
+    class <- unique(x$class)[1]
+    starts <- min(start(split(x, seqnames(x))))
+    ends <- max(end(split(x, seqnames(x))))
+    gr <- gaps(x, start=starts, end=ends)
+    gr <- gr[strand(gr)=='*']
+    data.frame(chr=seqnames(gr), length=width(gr), class=class, genome='mm10')
+  }))
+
+gapByClassLength <- rbind(hg19GapByClassLength, mm10GapByClassLength)
+
+summary(hg19GapByClassLength)
+summary(mm10GapByClassLength)
+```
+
+__Gap length by species__
+
+```{r fig.height=3.5}
+ggplot(gapByClassLength, aes(genome, log(length), fill=genome)) + geom_boxplot() +
+    theme(legend.position='none') + coord_flip() + scale_fill_brewer(palette='Dark2')
+```
+
+__Gap length by class__
+
+__in mouse__
+
+```{r}
+sapply(split(mm10GapByClassLength, mm10GapByClassLength$class), function(x) summary(x$length))
+```
+
+```{r}
+ggplot(gapByClassLength, aes(genome, log(length))) + 
+  geom_jitter(aes(colour=genome), alpha=0.05, position=position_jitter(width = .35)) + 
+  geom_boxplot(alpha=0) + scale_y_continuous(name='log(length)') + 
+  theme(legend.position='none') + scale_color_brewer(palette='Dark2') +
+  facet_grid(.~class)
+```
+
