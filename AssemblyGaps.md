@@ -3,13 +3,14 @@ Ronica K
 
 
 
-#Mouse Genome Assemblies
+# Mouse Genome Assemblies
 
 downloaded from UCSC
 
 
 
-##GRCm38/mm10 (Dec. 2011)
+## GRCm38/mm10 (Dec. 2011)
+
 
 ```
 ## GRanges object with 574 ranges and 3 metadata columns:
@@ -43,7 +44,7 @@ downloaded from UCSC
 ##   seqinfo: 21 sequences from mm10 genome; no seqlengths
 ```
 
-###Gap Types
+### Gap Types
 
 __clone__ - gaps between clones
 
@@ -70,7 +71,7 @@ __fragment__ - a single gap of 31 bases in chrX_GL456233_random
 ```
 
 
-##NCBI37/mm9 (July 2007)
+## NCBI37/mm9 (July 2007)
 
 ```
 ## GRanges object with 562 ranges and 3 metadata columns:
@@ -104,7 +105,7 @@ __fragment__ - a single gap of 31 bases in chrX_GL456233_random
 ##   seqinfo: 21 sequences from mm9 genome; no seqlengths
 ```
 
-###Gap Types
+### Gap Types
 
 __fragment__ - gaps between the contigs of a draft clone
 
@@ -120,7 +121,8 @@ __centromere__ - gaps from centromeres (3,000,000 Ns) or other large blocks of h
 ```
 
 
-##NCBI36/mm8 (Feb. 2006)
+## NCBI36/mm8 (Feb. 2006)
+
 
 ```
 ## GRanges object with 1343 ranges and 3 metadata columns:
@@ -154,7 +156,7 @@ __centromere__ - gaps from centromeres (3,000,000 Ns) or other large blocks of h
 ##   seqinfo: 21 sequences from mm8 genome; no seqlengths
 ```
 
-###Gap Types
+### Gap Types
 
 __fragment__ - gaps between the contigs of a draft clone
 
@@ -171,7 +173,8 @@ __centromere__ - gaps from centromeres (3,000,000 Ns) or other large blocks of h
 ```
 
 
-##NCBI35/mm7 (Aug. 2005)
+## NCBI35/mm7 (Aug. 2005)
+
 
 ```
 ## GRanges object with 21266 ranges and 3 metadata columns:
@@ -205,7 +208,7 @@ __centromere__ - gaps from centromeres (3,000,000 Ns) or other large blocks of h
 ##   seqinfo: 21 sequences from mm7 genome; no seqlengths
 ```
 
-###Gap Types
+### Gap Types
 
 __fragment__ - gaps between the contigs of a draft clone
 
@@ -223,7 +226,7 @@ __centromere__ - gaps from centromeres (3,000,000 Ns) or other large blocks of h
 ##          1        240         45      20980
 ```
 
-##Gaps on Chromosome Y
+## Gaps on Chromosome Y
 
 __mm10__
 

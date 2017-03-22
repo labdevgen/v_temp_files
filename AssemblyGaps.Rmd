@@ -10,7 +10,7 @@ output:
 knitr::opts_chunk$set(fig.width=8, dpi=300, echo=F, warning=F, message=F, cache=F)
 ```
 
-#Mouse Genome Assemblies
+# Mouse Genome Assemblies
 
 downloaded from UCSC
 
@@ -32,12 +32,13 @@ mm8gaps <- GapstoGR(filenames[3], 'mm8', mmnames)
 mm7gaps <- GapstoGR(filenames[4], 'mm7', mmnames)
 ```
 
-##GRCm38/mm10 (Dec. 2011)
+## GRCm38/mm10 (Dec. 2011)
+
 ```{r}
 sort(mm10gaps)
 ```
 
-###Gap Types
+### Gap Types
 
 __clone__ - gaps between clones
 
@@ -59,12 +60,12 @@ table(mm10gaps$type)
 ```
 
 
-##NCBI37/mm9 (July 2007)
+## NCBI37/mm9 (July 2007)
 ```{r}
 sort(mm9gaps)
 ```
 
-###Gap Types
+### Gap Types
 
 __fragment__ - gaps between the contigs of a draft clone
 
@@ -77,12 +78,13 @@ table(mm9gaps$type)
 ```
 
 
-##NCBI36/mm8 (Feb. 2006)
+## NCBI36/mm8 (Feb. 2006)
+
 ```{r}
 sort(mm8gaps)
 ```
 
-###Gap Types
+### Gap Types
 
 __fragment__ - gaps between the contigs of a draft clone
 
@@ -96,12 +98,13 @@ table(mm8gaps$type)
 ```
 
 
-##NCBI35/mm7 (Aug. 2005)
+## NCBI35/mm7 (Aug. 2005)
+
 ```{r}
 sort(mm7gaps)
 ```
 
-###Gap Types
+### Gap Types
 
 __fragment__ - gaps between the contigs of a draft clone
 
@@ -116,7 +119,7 @@ __centromere__ - gaps from centromeres (3,000,000 Ns) or other large blocks of h
 table(mm7gaps$type)
 ```
 
-##Gaps on Chromosome Y
+## Gaps on Chromosome Y
 
 __mm10__
 
