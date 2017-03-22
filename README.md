@@ -1,7 +1,7 @@
 # v_temp_files
-rm hg19
 
-__ToDo__
 
-- Mouse genome
+- Repeats are DEAD!
+
+- Gaps on agenda
 
