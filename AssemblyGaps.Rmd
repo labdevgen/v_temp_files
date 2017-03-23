@@ -10,27 +10,34 @@ output:
 knitr::opts_chunk$set(fig.width=8, dpi=300, echo=F, warning=F, message=F, cache=F)
 ```
 
-# Mouse Genome Assemblies
-
-downloaded from UCSC
-
 ```{r}
 library(BSgenome.Mmusculus.UCSC.mm10)
-library(ggplot2); library(RColorBrewer) 
-library(reshape2)
+library(BSgenome.Mmusculus.UCSC.mm9)
+library(BSgenome.Mmusculus.UCSC.mm8)
+
+library(BSgenome.Ggallus.UCSC.galGal5)
+library(BSgenome.Ggallus.UCSC.galGal4)
+library(BSgenome.Ggallus.UCSC.galGal3)
 
 source('../txtToGR.R')
 
-filenames <- c('../GenomeTables/mm10gaps.txt.gz', '../GenomeTables/mm9gaps.txt.gz',
-               '../GenomeTables/mm8gaps.txt.gz', '../GenomeTables/mm7gaps.txt.gz')
-mmnames <- paste0('chr', c(1:19, 'X', 'Y'))
+filenames_mouse <- c('../GenomeTables/mm10gaps.txt.gz', '../GenomeTables/mm9gaps.txt.gz',
+                     '../GenomeTables/mm8gaps.txt.gz', '../GenomeTables/mm7gaps.txt.gz')
+filenames_chicken <- c('../GenomeTables/gal5gaps.txt.gz','../GenomeTables/gal4gaps.txt.gz',
+                       '../GenomeTables/gal3gaps.txt.gz', '../GenomeTables/gal2gaps.txt.gz')
 
-#21
-mm10gaps <- GapstoGR(filenames[1], 'mm10', mmnames)
-mm9gaps <- GapstoGR(filenames[2], 'mm9', mmnames)
-mm8gaps <- GapstoGR(filenames[3], 'mm8', mmnames)
-mm7gaps <- GapstoGR(filenames[4], 'mm7', mmnames)
+mm10gaps <- GapstoGR(filenames_mouse[1], BSgenome.Mmusculus.UCSC.mm10)
+mm9gaps <- GapstoGR(filenames_mouse[2], BSgenome.Mmusculus.UCSC.mm9)
+mm8gaps <- GapstoGR(filenames_mouse[3], BSgenome.Mmusculus.UCSC.mm8)
+mm7gaps <- GapstoGR(filenames_mouse[4], genName='mm7') #package archived
+
+gal5gaps <- GapstoGR(filenames_chicken[1], BSgenome.Ggallus.UCSC.galGal5)
+gal4gaps <- GapstoGR(filenames_chicken[2], genName='galGal4') #shitty shit
+gal3gaps <- GapstoGR(filenames_chicken[3], BSgenome.Ggallus.UCSC.galGal3)
+gal2gaps <- GapstoGR(filenames_chicken[4], genName='galGal2')  #package archived
 ```
+
+# Mouse Genome Assemblies
 
 ## GRCm38/mm10 (Dec. 2011)
 
@@ -40,43 +47,42 @@ sort(mm10gaps)
 
 ### Gap Types
 
-__clone__ - gaps between clones
+__clone__ - gaps between clones.
 
-__contig__ - gaps between map contigs, various sizes
+__contig__ - gaps between map contigs, various sizes.
 
-__telomere__ - 42 gaps for telomeres (100,000 Ns)
+__telomere__ - 42 gaps for telomeres (100,000 Ns).
 
-__centromere__ - 20 gaps for centromeres (size: 2,890,000 Ns)
+__centromere__ - 20 gaps for centromeres (size: 2,890,000 Ns).
 
-__short_arm__ - 21 gaps for the short arm (10,000 Ns) at base positions 100,001-110,000 of each chromosome
+__short_arm__ - 21 gaps for the short arm (10,000 Ns) at base positions 100,001-110,000 of each chromosome.
 
-__other__ - sequence of Ns in the assembly that were not marked as gaps in the AGP assembly definition file, various sizes
+__other__ - sequence of Ns in the assembly that were not marked as gaps in the AGP assembly definition file, various sizes.
 
-__fragment__ - a single gap of 31 bases in chrX_GL456233_random
+__fragment__ - a single gap of 31 bases in chrX_GL456233_random.
 
 
 ```{r}
 table(mm10gaps$type)
 ```
 
-
 ## NCBI37/mm9 (July 2007)
+
 ```{r}
 sort(mm9gaps)
 ```
 
 ### Gap Types
 
-__fragment__ - gaps between the contigs of a draft clone
+__fragment__ - gaps between the contigs of a draft clone.
 
-__contig__ - gaps between map contigs
+__contig__ - gaps between map contigs.
 
-__centromere__ - gaps from centromeres (3,000,000 Ns) or other large blocks of heterochromatin (size varies)
+__centromere__ - gaps from centromeres (3,000,000 Ns) or other large blocks of heterochromatin (size varies).
 
 ```{r}
 table(mm9gaps$type)
 ```
-
 
 ## NCBI36/mm8 (Feb. 2006)
 
@@ -86,17 +92,16 @@ sort(mm8gaps)
 
 ### Gap Types
 
-__fragment__ - gaps between the contigs of a draft clone
+__fragment__ - gaps between the contigs of a draft clone.
 
-__contig__ - gaps between map contigs
+__contig__ - gaps between map contigs.
 
-__centromere__ - gaps from centromeres (3,000,000 Ns) or other large blocks of heterochromatin (size varies)
+__centromere__ - gaps from centromeres (3,000,000 Ns) or other large blocks of heterochromatin (size varies).
 
 
 ```{r}
 table(mm8gaps$type)
 ```
-
 
 ## NCBI35/mm7 (Aug. 2005)
 
@@ -106,41 +111,106 @@ sort(mm7gaps)
 
 ### Gap Types
 
-__fragment__ - gaps between the contigs of a draft clone
+__fragment__ - gaps between the contigs of a draft clone.
 
-__clone__ - gaps between clones in the same map contig
+__clone__ - gaps between clones in the same map contig.
 
-__contig__ - gaps between map contigs
+__contig__ - gaps between map contigs.
 
-__centromere__ - gaps from centromeres (3,000,000 Ns) or other large blocks of heterochromatin (size varies)
+__centromere__ - gaps from centromeres (3,000,000 Ns) or other large blocks of heterochromatin (size varies).
 
 
 ```{r}
 table(mm7gaps$type)
 ```
 
-## Gaps on Chromosome Y
 
-__mm10__
+# Chicken Genome Assemblies
+
+## Gallus_gallus-5.0/galGal5 (Dec. 2015)
 
 ```{r}
-sort(mm10gaps[seqnames(mm10gaps)=='chrY'])
+sort(gal5gaps)
 ```
 
-__mm9__
+### Gap Types
+
+__centromere__ - gaps for centromeres are included when they can be reasonably localized (count: 16; all of size 500,000 bases)
+
+__contig __ - gaps between contigs in scaffolds (count: 381; size range: 10 - 50,000 bases)
+
+__scaffold__ - gaps between scaffolds in chromosome assemblies (count: 819; size range: 13 - 156,025 bases)
 
 ```{r}
-sort(mm9gaps[seqnames(mm9gaps)=='chrY'])
+table(gal5gaps$type)
 ```
 
-__mm8__
+### Known vs Unknown Gap Size
 
 ```{r}
-sort(mm8gaps[seqnames(mm8gaps)=='chrY'])
+table(gal5gaps$status)
 ```
 
-__mm7__
+## ICGSC Gallus_gallus-4.0/galGal4 (Nov. 2011)
 
 ```{r}
-sort(mm7gaps[seqnames(mm7gaps)=='chrY'])
+sort(gal4gaps)
+```
+
+### Gap Types
+
+__fragment__ - gaps between the contigs of a draft clone. 
+
+__contig__ - whole genome sequence contigs.
+
+__other__ - sequences of gaps not marked in the assembly AGP files
+
+```{r}
+table(gal4gaps$type)
+```
+
+### Known vs Unknown Gap Size
+
+```{r}
+table(gal4gaps$status)
+```
+
+## WUGSC 2.1/galGal3 (May 2006)
+
+```{r}
+sort(gal3gaps)
+```
+
+### Gap Types
+
+__fragment__ - gaps between the contigs of a draft clone. 
+
+__clone__ - gaps between clones in the same map contig.
+
+Two more types somehow left behind.
+
+```{r}
+table(gal3gaps$type)
+```
+
+## WUGSC 1.0/galGal2 (Feb. 2004)
+
+```{r}
+sort(gal2gaps)
+```
+
+### Gap Types
+
+__fragment__ - gaps between the Whole Genome Shotgun contigs of a supercontig. (In this context, a contig is a set of overlapping sequence reads. A supercontig is a set of contigs ordered and oriented during the Whole Genome Shotgun process using paired-end reads.) 
+These are represented by varying numbers of Ns in the assembly. Fragment gap sizes are usually taken from read pair data.
+
+__clone__ - gaps between supercontigs linked by the fingerprint map. In general, these are represented by 10,000 Ns in the assembly.
+
+__contig__ - gaps between supercontigs not linked by the fingerprint map, but instead by marker data. (In this context, the "Contig" gap type refers to a map contig, not a sequence contig.) In general, these are represented by 10,000 Ns in the assembly for all chromosomes except chrUn (concatenation of unplaced supercontigs), where gaps of 1,000 Ns are used. Gaps of other sizes were used when mRNA or other data suggested possible but not confirmed links between supercontigs.
+
+__centromere__ - gaps for centromeres were included when they could be reasonably localized. These are represented by 1,500,000 Ns in the assembly for the macrochromosomes 1-10 and Z, and by 500,000 Ns for all others (microchromosomes)
+
+
+```{r}
+table(gal2gaps$type)
 ```
