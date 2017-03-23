@@ -251,7 +251,7 @@ __centromere__ - gaps from centromeres (3,000,000 Ns) or other large blocks of h
 
 __centromere__ - gaps for centromeres are included when they can be reasonably localized (count: 16; all of size 500,000 bases)
 
-__contig __ - gaps between contigs in scaffolds (count: 381; size range: 10 - 50,000 bases)
+__contig__ - gaps between contigs in scaffolds (count: 381; size range: 10 - 50,000 bases)
 
 __scaffold__ - gaps between scaffolds in chromosome assemblies (count: 819; size range: 13 - 156,025 bases)
 
