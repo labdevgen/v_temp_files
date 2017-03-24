@@ -271,6 +271,30 @@ __scaffold__ - gaps between scaffolds in chromosome assemblies (count: 819; size
 ## 859 357
 ```
 
+__Status=='Known'__
+
+
+```
+## 
+## centromere     contig   scaffold 
+##         16         25        818
+```
+
+### Euchromatic Gap Size Distribution (Status=='Known')
+
+
+```
+##         contig scaffold all.types
+## Min.        10     13.0        10
+## 1st Qu.  33000    424.5       430
+## Median   48570    766.5       790
+## Mean     38290   3379.0      4415
+## 3rd Qu.  50000   1271.0      1321
+## Max.     50000 156000.0    156000
+```
+
+![](AssemblyGaps_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
+
 ## ICGSC Gallus_gallus-4.0/galGal4 (Nov. 2011)
 
 
@@ -330,6 +354,30 @@ __other__ - sequences of gaps not marked in the assembly AGP files
 ## 12768  1130
 ```
 
+__Status=='Known'__
+
+
+```
+## 
+##   contig fragment    other 
+##       11     1722    11035
+```
+
+### Euchromatic Gap Size Distribution (Status=='Known')
+
+
+```
+##         contig fragment    other all.types
+## Min.     50000    100.0      1.0         1
+## 1st Qu.  50000    456.2      3.0       100
+## Median   50000   1244.0    142.0       207
+## Mean     50000   1833.0    929.6      1094
+## 3rd Qu.  50000   1835.0    525.0       695
+## Max.     50000  33330.0 131400.0    131400
+```
+
+![](AssemblyGaps_files/figure-html/unnamed-chunk-19-1.png)<!-- -->
+
 ## WUGSC 2.1/galGal3 (May 2006)
 
 
@@ -380,6 +428,21 @@ Two more types somehow left behind.
 ##         18        119      17317      61024
 ```
 
+### Euchromatic Gap Size Distribution (Status=='Known')
+
+
+```
+##         clone contig fragment all.types
+## Min.      100    100     10.0      10.0
+## 1st Qu.   100    100     10.0     100.0
+## Median    100    100    524.0     151.0
+## Mean      100    100    592.3     482.9
+## 3rd Qu.   100    100    853.2     745.0
+## Max.      100    100   2999.0    2999.0
+```
+
+![](AssemblyGaps_files/figure-html/unnamed-chunk-22-1.png)<!-- -->
+
 ## WUGSC 1.0/galGal2 (Feb. 2004)
 
 
@@ -420,3 +483,18 @@ __centromere__ - gaps for centromeres were included when they could be reasonabl
 ## centromere      clone     contig   fragment 
 ##         16        201      40495      71105
 ```
+
+### Euchromatic Gap Size Distribution (Status=='Known')
+
+
+```
+##         clone contig fragment all.types
+## Min.     1000    100     10.0      10.0
+## 1st Qu. 10000   1000    123.0     149.0
+## Median  10000   1000    187.0     259.0
+## Mean     9866   1071    240.2     558.4
+## 3rd Qu. 10000   1000    238.0    1000.0
+## Max.    10000  10000  16000.0   16000.0
+```
+
+![](AssemblyGaps_files/figure-html/unnamed-chunk-25-1.png)<!-- -->

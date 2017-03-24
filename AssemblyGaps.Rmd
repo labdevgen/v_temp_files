@@ -11,6 +11,8 @@ knitr::opts_chunk$set(fig.width=8, dpi=300, echo=F, warning=F, message=F, cache=
 ```
 
 ```{r}
+library(ggplot2);library(gridExtra)
+
 library(BSgenome.Mmusculus.UCSC.mm10)
 library(BSgenome.Mmusculus.UCSC.mm9)
 library(BSgenome.Mmusculus.UCSC.mm8)
@@ -35,6 +37,28 @@ gal5gaps <- GapstoGR(filenames_chicken[1], BSgenome.Ggallus.UCSC.galGal5)
 gal4gaps <- GapstoGR(filenames_chicken[2], genName='galGal4') #shitty shit
 gal3gaps <- GapstoGR(filenames_chicken[3], BSgenome.Ggallus.UCSC.galGal3)
 gal2gaps <- GapstoGR(filenames_chicken[4], genName='galGal2')  #package archived
+
+graph <- function(gr){
+  types <- c('centromere','telomere', 'short_arm')
+  sub <- gr[gr$status=='N' & !gr$type %in% types]
+  lengthDF <- data.frame(length=width(sub), type=sub$type)
+  lengthDF$type <- droplevels(lengthDF$type)
+  
+  print(cbind(as.data.frame(sapply(split(lengthDF, lengthDF$type), 
+                                   function(x) summary(x$length))), 
+              do.call(rbind, Map(data.frame, all.types= summary(lengthDF$length)))))
+  
+  g1 <- ggplot(lengthDF, aes(x=length)) + geom_histogram(colour='white') +
+    scale_y_continuous(trans='sqrt', name='sqrt(count)') + 
+    scale_x_continuous(trans='sqrt', name='sqrt(length)') 
+  
+  g2 <- ggplot(lengthDF, aes(x=length)) + geom_histogram(colour='white') + 
+    facet_grid(type ~ ., scales='free_y') + 
+    scale_y_continuous(trans='sqrt', name='sqrt(count)') + 
+    scale_x_continuous(trans='sqrt', name='sqrt(length)') 
+  
+  grid.arrange(g1, g2)
+}
 ```
 
 # Mouse Genome Assemblies
@@ -151,6 +175,18 @@ table(gal5gaps$type)
 table(gal5gaps$status)
 ```
 
+__Status=='Known'__
+
+```{r}
+table(gal5gaps[gal5gaps$status=='N']$type)
+```
+
+### Euchromatic Gap Size Distribution (Status=='Known')
+
+```{r fig.height=8}
+graph(gal5gaps)
+```
+
 ## ICGSC Gallus_gallus-4.0/galGal4 (Nov. 2011)
 
 ```{r}
@@ -175,6 +211,18 @@ table(gal4gaps$type)
 table(gal4gaps$status)
 ```
 
+__Status=='Known'__
+
+```{r}
+table(gal4gaps[gal4gaps$status=='N']$type)
+```
+
+### Euchromatic Gap Size Distribution (Status=='Known')
+
+```{r fig.height=8}
+graph(gal4gaps)
+```
+
 ## WUGSC 2.1/galGal3 (May 2006)
 
 ```{r}
@@ -191,6 +239,12 @@ Two more types somehow left behind.
 
 ```{r}
 table(gal3gaps$type)
+```
+
+### Euchromatic Gap Size Distribution (Status=='Known')
+
+```{r fig.height=8}
+graph(gal3gaps)
 ```
 
 ## WUGSC 1.0/galGal2 (Feb. 2004)
@@ -213,4 +267,10 @@ __centromere__ - gaps for centromeres were included when they could be reasonabl
 
 ```{r}
 table(gal2gaps$type)
+```
+
+### Euchromatic Gap Size Distribution (Status=='Known')
+
+```{r fig.height=8}
+graph(gal2gaps)
 ```
