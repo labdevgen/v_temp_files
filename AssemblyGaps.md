@@ -12,32 +12,19 @@ Ronica K
 
 ```
 ## GRanges object with 686 ranges and 3 metadata columns:
-##               seqnames               ranges strand |   status       type
-##                  <Rle>            <IRanges>  <Rle> | <factor>   <factor>
-##     [1]           chr1 [       1,   100000]      * |        N   telomere
-##     [2]           chr1 [  100001,   110000]      * |        N  short_arm
-##     [3]           chr1 [  110001,  3000000]      * |        N centromere
-##     [4]           chr1 [ 3002130,  3003118]      * |        N      other
-##     [5]           chr1 [22424868, 22424967]      * |        N      other
-##     ...            ...                  ...    ... .      ...        ...
-##   [682] chrUn_GL456393       [53788, 53887]      * |        N      clone
-##   [683] chrUn_GL456394       [ 1035,  2612]      * |        N      clone
-##   [684] chrUn_GL456394       [20897, 21977]      * |        N      clone
-##   [685] chrUn_GL456396       [ 7730,  8220]      * |        N      clone
-##   [686] chrUn_GL456396       [11697, 11940]      * |        N      clone
-##           bridge
-##         <factor>
-##     [1]       no
-##     [2]       no
-##     [3]       no
-##     [4]      yes
-##     [5]      yes
-##     ...      ...
-##   [682]      yes
-##   [683]      yes
-##   [684]      yes
-##   [685]      yes
-##   [686]      yes
+##               seqnames               ranges strand |   status       type   bridge
+##                  <Rle>            <IRanges>  <Rle> | <factor>   <factor> <factor>
+##     [1]           chr1 [       1,   100000]      * |        N   telomere       no
+##     [2]           chr1 [  100001,   110000]      * |        N  short_arm       no
+##     [3]           chr1 [  110001,  3000000]      * |        N centromere       no
+##     [4]           chr1 [ 3002130,  3003118]      * |        N      other      yes
+##     [5]           chr1 [22424868, 22424967]      * |        N      other      yes
+##     ...            ...                  ...    ... .      ...        ...      ...
+##   [682] chrUn_GL456393       [53788, 53887]      * |        N      clone      yes
+##   [683] chrUn_GL456394       [ 1035,  2612]      * |        N      clone      yes
+##   [684] chrUn_GL456394       [20897, 21977]      * |        N      clone      yes
+##   [685] chrUn_GL456396       [ 7730,  8220]      * |        N      clone      yes
+##   [686] chrUn_GL456396       [11697, 11940]      * |        N      clone      yes
 ##   -------
 ##   seqinfo: 44 sequences from mm10 genome
 ```
@@ -62,43 +49,43 @@ __fragment__ - a single gap of 31 bases in chrX_GL456233_random.
 
 ```
 ## 
-## centromere      clone     contig   fragment      other  short_arm 
-##         20        114        104          1        384         21 
-##   telomere 
-##         42
+## centromere      clone     contig   fragment      other  short_arm   telomere 
+##         20        114        104          1        384         21         42
 ```
+
+### Euchromatic Gap Size Distribution (Status=='Known')
+
+
+```
+##         clone contig fragment  other all.types
+## Min.      100    717       31      1         1
+## 1st Qu.   100  50000       31    100       100
+## Median    343  55000       31    100       344
+## Mean     2529  91290       31  15870     26330
+## 3rd Qu.  1316 100000       31   1803     50000
+## Max.    50000 800000       31 300000    800000
+```
+
+![](AssemblyGaps_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
 
 ## NCBI37/mm9 (July 2007)
 
 
 ```
 ## GRanges object with 1011 ranges and 3 metadata columns:
-##              seqnames               ranges strand |   status       type
-##                 <Rle>            <IRanges>  <Rle> | <factor>   <factor>
-##      [1]         chr1 [       1,  3000000]      * |        N centromere
-##      [2]         chr1 [22414949, 22415048]      * |        N   fragment
-##      [3]         chr1 [22423350, 22473349]      * |        N     contig
-##      [4]         chr1 [24686639, 24736638]      * |        N   fragment
-##      [5]         chr1 [75102131, 75118130]      * |        N     contig
-##      ...          ...                  ...    ... .      ...        ...
-##   [1007] chrUn_random   [5884087, 5884186]      * |        N   fragment
-##   [1008] chrUn_random   [5892169, 5892268]      * |        N   fragment
-##   [1009] chrUn_random   [5894720, 5896266]      * |        N   fragment
-##   [1010] chrUn_random   [5897640, 5897925]      * |        N   fragment
-##   [1011] chrUn_random   [5898884, 5899265]      * |        N   fragment
-##            bridge
-##          <factor>
-##      [1]       no
-##      [2]      yes
-##      [3]       no
-##      [4]       no
-##      [5]       no
-##      ...      ...
-##   [1007]      yes
-##   [1008]      yes
-##   [1009]      yes
-##   [1010]      yes
-##   [1011]      yes
+##              seqnames               ranges strand |   status       type   bridge
+##                 <Rle>            <IRanges>  <Rle> | <factor>   <factor> <factor>
+##      [1]         chr1 [       1,  3000000]      * |        N centromere       no
+##      [2]         chr1 [22414949, 22415048]      * |        N   fragment      yes
+##      [3]         chr1 [22423350, 22473349]      * |        N     contig       no
+##      [4]         chr1 [24686639, 24736638]      * |        N   fragment       no
+##      [5]         chr1 [75102131, 75118130]      * |        N     contig       no
+##      ...          ...                  ...    ... .      ...        ...      ...
+##   [1007] chrUn_random   [5884087, 5884186]      * |        N   fragment      yes
+##   [1008] chrUn_random   [5892169, 5892268]      * |        N   fragment      yes
+##   [1009] chrUn_random   [5894720, 5896266]      * |        N   fragment      yes
+##   [1010] chrUn_random   [5897640, 5897925]      * |        N   fragment      yes
+##   [1011] chrUn_random   [5898884, 5899265]      * |        N   fragment      yes
 ##   -------
 ##   seqinfo: 32 sequences from mm9 genome
 ```
@@ -118,37 +105,39 @@ __centromere__ - gaps from centromeres (3,000,000 Ns) or other large blocks of h
 ##         21        281        709
 ```
 
+### Euchromatic Gap Size Distribution (Status=='Known')
+
+
+```
+##           contig fragment all.types
+## Min.        1700       31 3.100e+01
+## 1st Qu.    50000      100 1.000e+02
+## Median     50000      100 7.065e+02
+## Mean      138100     5087 4.285e+04
+## 3rd Qu.    50000      998 5.000e+04
+## Max.    10000000   222300 1.000e+07
+```
+
+![](AssemblyGaps_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+
 ## NCBI36/mm8 (Feb. 2006)
 
 
 ```
 ## GRanges object with 1408 ranges and 3 metadata columns:
-##              seqnames               ranges strand |   status       type
-##                 <Rle>            <IRanges>  <Rle> | <factor>   <factor>
-##      [1]         chr1 [       1,  3000000]      * |        N centromere
-##      [2]         chr1 [22410019, 22410118]      * |        N   fragment
-##      [3]         chr1 [22418420, 22420785]      * |        N     contig
-##      [4]         chr1 [24670818, 24670917]      * |        N   fragment
-##      [5]         chr1 [74988764, 75004763]      * |        N     contig
-##      ...          ...                  ...    ... .      ...        ...
-##   [1404] chrUn_random   [1203868, 1253867]      * |        N     contig
-##   [1405] chrUn_random   [1272966, 1322965]      * |        N     contig
-##   [1406] chrUn_random   [1333015, 1383014]      * |        N     contig
-##   [1407] chrUn_random   [1397960, 1447959]      * |        N     contig
-##   [1408] chrUn_random   [1450045, 1500044]      * |        N     contig
-##            bridge
-##          <factor>
-##      [1]       no
-##      [2]      yes
-##      [3]       no
-##      [4]      yes
-##      [5]       no
-##      ...      ...
-##   [1404]       no
-##   [1405]       no
-##   [1406]       no
-##   [1407]       no
-##   [1408]       no
+##              seqnames               ranges strand |   status       type   bridge
+##                 <Rle>            <IRanges>  <Rle> | <factor>   <factor> <factor>
+##      [1]         chr1 [       1,  3000000]      * |        N centromere       no
+##      [2]         chr1 [22410019, 22410118]      * |        N   fragment      yes
+##      [3]         chr1 [22418420, 22420785]      * |        N     contig       no
+##      [4]         chr1 [24670818, 24670917]      * |        N   fragment      yes
+##      [5]         chr1 [74988764, 75004763]      * |        N     contig       no
+##      ...          ...                  ...    ... .      ...        ...      ...
+##   [1404] chrUn_random   [1203868, 1253867]      * |        N     contig       no
+##   [1405] chrUn_random   [1272966, 1322965]      * |        N     contig       no
+##   [1406] chrUn_random   [1333015, 1383014]      * |        N     contig       no
+##   [1407] chrUn_random   [1397960, 1447959]      * |        N     contig       no
+##   [1408] chrUn_random   [1450045, 1500044]      * |        N     contig       no
 ##   -------
 ##   seqinfo: 29 sequences from mm8 genome
 ```
@@ -169,37 +158,39 @@ __centromere__ - gaps from centromeres (3,000,000 Ns) or other large blocks of h
 ##         21        169       1218
 ```
 
+### Euchromatic Gap Size Distribution (Status=='Known')
+
+
+```
+##           contig fragment all.types
+## Min.        1700    100.0       100
+## 1st Qu.    50000    100.0       100
+## Median     50000    100.0       100
+## Mean      166200   4999.0     24640
+## 3rd Qu.    50000    635.8      1992
+## Max.    10000000 222300.0  10000000
+```
+
+![](AssemblyGaps_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
+
 ## NCBI35/mm7 (Aug. 2005)
 
 
 ```
 ## GRanges object with 26075 ranges and 3 metadata columns:
-##               seqnames               ranges strand |   status     type
-##                  <Rle>            <IRanges>  <Rle> | <factor> <factor>
-##       [1]         chr1   [      1, 3000000]      * |        N    clone
-##       [2]         chr1   [3276495, 3276594]      * |        N fragment
-##       [3]         chr1   [3284014, 3284371]      * |        N fragment
-##       [4]         chr1   [3287469, 3287568]      * |        N fragment
-##       [5]         chr1   [3295419, 3295518]      * |        N fragment
-##       ...          ...                  ...    ... .      ...      ...
-##   [26071] chrUn_random [12765471, 12766470]      * |        N   contig
-##   [26072] chrUn_random [12768681, 12769680]      * |        N   contig
-##   [26073] chrUn_random [12772252, 12773251]      * |        N   contig
-##   [26074] chrUn_random [12774385, 12775384]      * |        N   contig
-##   [26075] chrUn_random [12776860, 12777859]      * |        N   contig
-##             bridge
-##           <factor>
-##       [1]       no
-##       [2]      yes
-##       [3]      yes
-##       [4]      yes
-##       [5]      yes
-##       ...      ...
-##   [26071]       no
-##   [26072]       no
-##   [26073]       no
-##   [26074]       no
-##   [26075]       no
+##               seqnames               ranges strand |   status     type   bridge
+##                  <Rle>            <IRanges>  <Rle> | <factor> <factor> <factor>
+##       [1]         chr1   [      1, 3000000]      * |        N    clone       no
+##       [2]         chr1   [3276495, 3276594]      * |        N fragment      yes
+##       [3]         chr1   [3284014, 3284371]      * |        N fragment      yes
+##       [4]         chr1   [3287469, 3287568]      * |        N fragment      yes
+##       [5]         chr1   [3295419, 3295518]      * |        N fragment      yes
+##       ...          ...                  ...    ... .      ...      ...      ...
+##   [26071] chrUn_random [12765471, 12766470]      * |        N   contig       no
+##   [26072] chrUn_random [12768681, 12769680]      * |        N   contig       no
+##   [26073] chrUn_random [12772252, 12773251]      * |        N   contig       no
+##   [26074] chrUn_random [12774385, 12775384]      * |        N   contig       no
+##   [26075] chrUn_random [12776860, 12777859]      * |        N   contig       no
 ##   -------
 ##   seqinfo: 39 sequences from mm7 genome; no seqlengths
 ```
@@ -222,6 +213,20 @@ __centromere__ - gaps from centromeres (3,000,000 Ns) or other large blocks of h
 ##          1        240       4854      20980
 ```
 
+### Euchromatic Gap Size Distribution (Status=='Known')
+
+
+```
+##           clone  contig fragment all.types
+## Min.       5000 1.0e+03      100       100
+## 1st Qu.   50000 1.0e+03      100       100
+## Median    50000 5.0e+04      100       186
+## Mean     247800 3.7e+04     1061     10020
+## 3rd Qu.   50000 5.0e+04      473      1011
+## Max.    3000000 1.0e+07   222300  10000000
+```
+
+![](AssemblyGaps_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
 
 # Chicken Genome Assemblies
 
@@ -293,39 +298,26 @@ __Status=='Known'__
 ## Max.     50000 156000.0    156000
 ```
 
-![](AssemblyGaps_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
+![](AssemblyGaps_files/figure-html/unnamed-chunk-17-1.png)<!-- -->
 
 ## ICGSC Gallus_gallus-4.0/galGal4 (Nov. 2011)
 
 
 ```
 ## GRanges object with 13898 ranges and 3 metadata columns:
-##                           seqnames           ranges strand |   status
-##                              <Rle>        <IRanges>  <Rle> | <factor>
-##       [1]                     chr1     [1034, 1133]      * |        U
-##       [2]                     chr1     [1635, 1734]      * |        U
-##       [3]                     chr1     [2505, 2604]      * |        U
-##       [4]                     chr1     [3124, 3223]      * |        U
-##       [5]                     chr1     [4729, 4828]      * |        U
-##       ...                      ...              ...    ... .      ...
-##   [13894]                 chrLGE64 [791273, 791372]      * |        U
-##   [13895]                 chrLGE64 [792241, 792340]      * |        U
-##   [13896] chrLGE64_JH375238_random [  1763,   1862]      * |        U
-##   [13897] chrLGE64_JH375239_random [  1769,   1868]      * |        U
-##   [13898] chrLGE64_JH375239_random [  4383,   4482]      * |        U
-##               type   bridge
-##           <factor> <factor>
-##       [1]   contig       no
-##       [2]   contig       no
-##       [3]   contig       no
-##       [4]   contig       no
-##       [5]   contig       no
-##       ...      ...      ...
-##   [13894]   contig       no
-##   [13895]   contig       no
-##   [13896] fragment      yes
-##   [13897] fragment      yes
-##   [13898] fragment      yes
+##                           seqnames           ranges strand |   status     type   bridge
+##                              <Rle>        <IRanges>  <Rle> | <factor> <factor> <factor>
+##       [1]                     chr1     [1034, 1133]      * |        U   contig       no
+##       [2]                     chr1     [1635, 1734]      * |        U   contig       no
+##       [3]                     chr1     [2505, 2604]      * |        U   contig       no
+##       [4]                     chr1     [3124, 3223]      * |        U   contig       no
+##       [5]                     chr1     [4729, 4828]      * |        U   contig       no
+##       ...                      ...              ...    ... .      ...      ...      ...
+##   [13894]                 chrLGE64 [791273, 791372]      * |        U   contig       no
+##   [13895]                 chrLGE64 [792241, 792340]      * |        U   contig       no
+##   [13896] chrLGE64_JH375238_random [  1763,   1862]      * |        U fragment      yes
+##   [13897] chrLGE64_JH375239_random [  1769,   1868]      * |        U fragment      yes
+##   [13898] chrLGE64_JH375239_random [  4383,   4482]      * |        U fragment      yes
 ##   -------
 ##   seqinfo: 1858 sequences from galGal4 genome; no seqlengths
 ```
@@ -376,39 +368,26 @@ __Status=='Known'__
 ## Max.     50000  33330.0 131400.0    131400
 ```
 
-![](AssemblyGaps_files/figure-html/unnamed-chunk-19-1.png)<!-- -->
+![](AssemblyGaps_files/figure-html/unnamed-chunk-22-1.png)<!-- -->
 
 ## WUGSC 2.1/galGal3 (May 2006)
 
 
 ```
 ## GRanges object with 78478 ranges and 3 metadata columns:
-##                seqnames           ranges strand |   status     type
-##                   <Rle>        <IRanges>  <Rle> | <factor> <factor>
-##       [1]          chr1   [ 5231,  5240]      * |        N fragment
-##       [2]          chr1   [ 6541,  6550]      * |        N fragment
-##       [3]          chr1   [16469, 16478]      * |        N fragment
-##       [4]          chr1   [31259, 31358]      * |        N fragment
-##       [5]          chr1   [40054, 40360]      * |        N fragment
-##       ...           ...              ...    ... .      ...      ...
-##   [78474] chrE64_random [489602, 489765]      * |        N fragment
-##   [78475] chrE64_random [507128, 508059]      * |        N fragment
-##   [78476] chrE64_random [539187, 540173]      * |        N fragment
-##   [78477] chrE64_random [542104, 542113]      * |        N fragment
-##   [78478] chrE64_random [554482, 556165]      * |        N fragment
-##             bridge
-##           <factor>
-##       [1]      yes
-##       [2]      yes
-##       [3]      yes
-##       [4]      yes
-##       [5]      yes
-##       ...      ...
-##   [78474]      yes
-##   [78475]      yes
-##   [78476]      yes
-##   [78477]      yes
-##   [78478]      yes
+##                seqnames           ranges strand |   status     type   bridge
+##                   <Rle>        <IRanges>  <Rle> | <factor> <factor> <factor>
+##       [1]          chr1   [ 5231,  5240]      * |        N fragment      yes
+##       [2]          chr1   [ 6541,  6550]      * |        N fragment      yes
+##       [3]          chr1   [16469, 16478]      * |        N fragment      yes
+##       [4]          chr1   [31259, 31358]      * |        N fragment      yes
+##       [5]          chr1   [40054, 40360]      * |        N fragment      yes
+##       ...           ...              ...    ... .      ...      ...      ...
+##   [78474] chrE64_random [489602, 489765]      * |        N fragment      yes
+##   [78475] chrE64_random [507128, 508059]      * |        N fragment      yes
+##   [78476] chrE64_random [539187, 540173]      * |        N fragment      yes
+##   [78477] chrE64_random [542104, 542113]      * |        N fragment      yes
+##   [78478] chrE64_random [554482, 556165]      * |        N fragment      yes
 ##   -------
 ##   seqinfo: 52 sequences from galGal3 genome
 ```
@@ -441,7 +420,7 @@ Two more types somehow left behind.
 ## Max.      100    100   2999.0    2999.0
 ```
 
-![](AssemblyGaps_files/figure-html/unnamed-chunk-22-1.png)<!-- -->
+![](AssemblyGaps_files/figure-html/unnamed-chunk-25-1.png)<!-- -->
 
 ## WUGSC 1.0/galGal2 (Feb. 2004)
 
@@ -497,4 +476,4 @@ __centromere__ - gaps for centromeres were included when they could be reasonabl
 ## Max.    10000  10000  16000.0   16000.0
 ```
 
-![](AssemblyGaps_files/figure-html/unnamed-chunk-25-1.png)<!-- -->
+![](AssemblyGaps_files/figure-html/unnamed-chunk-28-1.png)<!-- -->

@@ -6,12 +6,13 @@ output:
     keep_md: true
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(fig.width=8, dpi=300, echo=F, warning=F, message=F, cache=F)
+```{r set-options, setup, include=FALSE}
+options(width=90)
+knitr::opts_chunk$set(fig.width=8, echo=F, warning=F, message=F, cache=F)
 ```
 
 ```{r}
-library(ggplot2);library(gridExtra)
+library(ggplot2)
 
 library(BSgenome.Mmusculus.UCSC.mm10)
 library(BSgenome.Mmusculus.UCSC.mm9)
@@ -43,22 +44,16 @@ graph <- function(gr){
   sub <- gr[gr$status=='N' & !gr$type %in% types]
   lengthDF <- data.frame(length=width(sub), type=sub$type)
   lengthDF$type <- droplevels(lengthDF$type)
+  lengthDF <- rbind(lengthDF, transform(lengthDF, type='all.types'))
   
-  print(cbind(as.data.frame(sapply(split(lengthDF, lengthDF$type), 
-                                   function(x) summary(x$length))), 
-              do.call(rbind, Map(data.frame, all.types= summary(lengthDF$length)))))
-  
-  g1 <- ggplot(lengthDF, aes(x=length)) + geom_histogram(colour='white') +
-    scale_y_continuous(trans='sqrt', name='sqrt(count)') + 
-    scale_x_continuous(trans='sqrt', name='sqrt(length)') 
-  
-  g2 <- ggplot(lengthDF, aes(x=length)) + geom_histogram(colour='white') + 
+  print(sapply(split(lengthDF, lengthDF$type), function(x) summary(x$length)))
+
+  ggplot(lengthDF, aes(x=length)) + geom_histogram(bins=65, colour='white') + 
     facet_grid(type ~ ., scales='free_y') + 
     scale_y_continuous(trans='sqrt', name='sqrt(count)') + 
     scale_x_continuous(trans='sqrt', name='sqrt(length)') 
-  
-  grid.arrange(g1, g2)
 }
+
 ```
 
 # Mouse Genome Assemblies
@@ -86,8 +81,14 @@ __other__ - sequence of Ns in the assembly that were not marked as gaps in the A
 __fragment__ - a single gap of 31 bases in chrX_GL456233_random.
 
 
-```{r}
+```{r kable}
 table(mm10gaps$type)
+```
+
+### Euchromatic Gap Size Distribution (Status=='Known')
+
+```{r fig.height=7.5}
+graph(mm10gaps)
 ```
 
 ## NCBI37/mm9 (July 2007)
@@ -108,6 +109,12 @@ __centromere__ - gaps from centromeres (3,000,000 Ns) or other large blocks of h
 table(mm9gaps$type)
 ```
 
+### Euchromatic Gap Size Distribution (Status=='Known')
+
+```{r fig.height=4.5}
+graph(mm9gaps)
+```
+
 ## NCBI36/mm8 (Feb. 2006)
 
 ```{r}
@@ -125,6 +132,12 @@ __centromere__ - gaps from centromeres (3,000,000 Ns) or other large blocks of h
 
 ```{r}
 table(mm8gaps$type)
+```
+
+### Euchromatic Gap Size Distribution (Status=='Known')
+
+```{r fig.height=4.5}
+graph(mm8gaps)
 ```
 
 ## NCBI35/mm7 (Aug. 2005)
@@ -148,6 +161,11 @@ __centromere__ - gaps from centromeres (3,000,000 Ns) or other large blocks of h
 table(mm7gaps$type)
 ```
 
+### Euchromatic Gap Size Distribution (Status=='Known')
+
+```{r fig.height=6}
+graph(mm7gaps)
+```
 
 # Chicken Genome Assemblies
 
@@ -183,7 +201,7 @@ table(gal5gaps[gal5gaps$status=='N']$type)
 
 ### Euchromatic Gap Size Distribution (Status=='Known')
 
-```{r fig.height=8}
+```{r fig.height=4.5}
 graph(gal5gaps)
 ```
 
@@ -219,7 +237,7 @@ table(gal4gaps[gal4gaps$status=='N']$type)
 
 ### Euchromatic Gap Size Distribution (Status=='Known')
 
-```{r fig.height=8}
+```{r fig.height=6}
 graph(gal4gaps)
 ```
 
@@ -243,7 +261,7 @@ table(gal3gaps$type)
 
 ### Euchromatic Gap Size Distribution (Status=='Known')
 
-```{r fig.height=8}
+```{r fig.height=6}
 graph(gal3gaps)
 ```
 
@@ -271,6 +289,6 @@ table(gal2gaps$type)
 
 ### Euchromatic Gap Size Distribution (Status=='Known')
 
-```{r fig.height=8}
+```{r fig.height=6}
 graph(gal2gaps)
 ```
