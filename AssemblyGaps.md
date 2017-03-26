@@ -477,3 +477,170 @@ __centromere__ - gaps for centromeres were included when they could be reasonabl
 ```
 
 ![](AssemblyGaps_files/figure-html/unnamed-chunk-28-1.png)<!-- -->
+
+
+# Gaps & Rmsk Overlaps
+
+
+
+## Mouse (mm10 Assembly)
+
+### Number of Overlaps between Gaps and Rmsk Intervals
+
+
+```
+## [1] 71
+```
+
+### Subset of Gaps Overlaping Rmsk Intervals
+
+
+```
+## GRanges object with 71 ranges and 3 metadata columns:
+##                    seqnames                 ranges strand |   status     type   bridge
+##                       <Rle>              <IRanges>  <Rle> | <factor> <factor> <factor>
+##    [1]                 chr1 [ 25909751,  25909751]      * |        N    other      yes
+##    [2]                 chr1 [167685493, 167685502]      * |        N    other      yes
+##    [3]                 chr1 [167817560, 167817569]      * |        N    other      yes
+##    [4]                 chr1 [171228616, 171228616]      * |        N    other      yes
+##    [5]                 chr1 [171228619, 171228619]      * |        N    other      yes
+##    ...                  ...                    ...    ... .      ...      ...      ...
+##   [67] chrX_GL456233_random       [194757, 194856]      * |        N    clone      yes
+##   [68] chrX_GL456233_random       [235308, 235407]      * |        N    clone      yes
+##   [69] chrX_GL456233_random       [287721, 287820]      * |        N    clone      yes
+##   [70] chrX_GL456233_random       [300319, 300349]      * |        N fragment      yes
+##   [71] chrX_GL456233_random       [310659, 310758]      * |        N    clone      yes
+##   -------
+##   seqinfo: 44 sequences from mm10 genome
+```
+
+### Subset of Rmsk Intervals Overlaping Gaps
+
+Some Rmsk intervals seem to overlap multiple gaps 
+
+
+```
+## GRanges object with 62 ranges and 3 metadata columns:
+##                    seqnames                 ranges strand |           name         class         family
+##                       <Rle>              <IRanges>  <Rle> |       <factor>      <factor>       <factor>
+##    [1]                 chr1 [ 25909724,  25909753]      + |           (T)n Simple_repeat  Simple_repeat
+##    [2]                 chr1 [167685412, 167685581]      + |          (CA)n Simple_repeat  Simple_repeat
+##    [3]                 chr1 [167817421, 167817603]      - |       RMER17D2           LTR           ERVK
+##    [4]                 chr1 [171228594, 171228645]      + |         G-rich Simple_repeat Low_complexity
+##    [5]                 chr1 [171424103, 171424251]      + |        B1_Mus2          SINE            Alu
+##    ...                  ...                    ...    ... .            ...           ...            ...
+##   [58] chrX_GL456233_random       [194420, 195064]      + |        L1_Mus3          LINE             L1
+##   [59] chrX_GL456233_random       [234747, 236977]      - |        L1_Mus1          LINE             L1
+##   [60] chrX_GL456233_random       [287540, 292278]      - |         L1Md_T          LINE             L1
+##   [61] chrX_GL456233_random       [297242, 301568]      + |        L1Md_F2          LINE             L1
+##   [62] chrX_GL456233_random       [308909, 310817]      - | MurERV4_19-int           LTR           ERVK
+##   -------
+##   seqinfo: 66 sequences from mm10 genome
+```
+
+### Number of Gaps Completely Covered (like 146%) by Rmsk Intervals
+
+
+```
+## [1] 71
+```
+
+### Overlaping Interval Pairs
+
+
+```
+## Pairs object with 71 pairs and 0 metadata columns:
+##                                     first                               second
+##                                 <GRanges>                            <GRanges>
+##    [1]             chr1:25909751-25909751             chr1:25909724-25909753:+
+##    [2]           chr1:167685493-167685502           chr1:167685412-167685581:+
+##    [3]           chr1:167817560-167817569           chr1:167817421-167817603:-
+##    [4]           chr1:171228616-171228616           chr1:171228594-171228645:+
+##    [5]           chr1:171228619-171228619           chr1:171228594-171228645:+
+##    ...                                ...                                  ...
+##   [67] chrX_GL456233_random:194757-194856 chrX_GL456233_random:194420-195064:+
+##   [68] chrX_GL456233_random:235308-235407 chrX_GL456233_random:234747-236977:-
+##   [69] chrX_GL456233_random:287721-287820 chrX_GL456233_random:287540-292278:-
+##   [70] chrX_GL456233_random:300319-300349 chrX_GL456233_random:297242-301568:+
+##   [71] chrX_GL456233_random:310659-310758 chrX_GL456233_random:308909-310817:-
+```
+
+## Chicken (galGal5 Assembly)
+
+### Number of Overlaps between Gaps and Rmsk Intervals
+
+
+```
+## [1] 40
+```
+
+### Subset of Gaps Overlaping Rmsk Intervals
+
+
+```
+## GRanges object with 40 ranges and 3 metadata columns:
+##                       seqnames                 ranges strand |   status     type   bridge
+##                          <Rle>              <IRanges>  <Rle> | <factor> <factor> <factor>
+##    [1]                    chr1 [  9033091,   9033190]      * |        U   contig       no
+##    [2]                    chr1 [ 43492265,  43492364]      * |        U   contig       no
+##    [3]                    chr1 [ 83170188,  83170223]      * |        N scaffold      yes
+##    [4]                    chr1 [106770471, 106770570]      * |        U   contig       no
+##    [5]                    chr2 [ 97750141,  97750240]      * |        U   contig       no
+##    ...                     ...                    ...    ... .      ...      ...      ...
+##   [36]       chrUn_NT_477194v1           [1734, 1776]      * |        N scaffold      yes
+##   [37]       chrUn_NT_477781v1           [ 787,  822]      * |        N scaffold      yes
+##   [38]       chrUn_NT_478291v1           [ 857,  892]      * |        N scaffold      yes
+##   [39] chr6_NT_461060v1_random           [ 591,  626]      * |        N scaffold      yes
+##   [40] chrZ_NT_463816v1_random           [7848, 8194]      * |        N scaffold      yes
+##   -------
+##   seqinfo: 447 sequences from galGal5 genome
+```
+
+### Subset of Rmsk Intervals Overlaping Gaps
+
+
+```
+## GRanges object with 36 ranges and 3 metadata columns:
+##                       seqnames                 ranges strand |         name         class        family
+##                          <Rle>              <IRanges>  <Rle> |     <factor>      <factor>      <factor>
+##    [1]                    chr1 [  9027991,   9034501]      + |    (AGGGTT)n Simple_repeat Simple_repeat
+##    [2]                    chr1 [ 43490080,  43494183]      + |    (GGTTAG)n Simple_repeat Simple_repeat
+##    [3]                    chr1 [ 83167957,  83171090]      + | (AACAACGCA)n Simple_repeat Simple_repeat
+##    [4]                    chr1 [106769537, 106771836]      + |     (GAGGA)n Simple_repeat Simple_repeat
+##    [5]                    chr2 [ 97748201,  97752160]      + |    (CTAACC)n Simple_repeat Simple_repeat
+##    ...                     ...                    ...    ... .          ...           ...           ...
+##   [32]       chrUn_NT_477194v1           [   1, 2617]      + |    (TTAGGG)n Simple_repeat Simple_repeat
+##   [33]       chrUn_NT_477781v1           [ 625,  950]      + |       GGXHOI Simple_repeat  W-chromosome
+##   [34]       chrUn_NT_478291v1           [ 538, 1202]      + |       GGXHOI Simple_repeat  W-chromosome
+##   [35] chr6_NT_461060v1_random           [   7, 1828]      + |    (TGTAGA)n Simple_repeat Simple_repeat
+##   [36] chrZ_NT_463816v1_random           [6717, 8764]      + | GGERVL-B-int           LTR          ERVL
+##   -------
+##   seqinfo: 22168 sequences from galGal5 genome
+```
+
+### Number of Gaps Completely Covered by Rmsk Intervals
+
+
+```
+## [1] 40
+```
+
+### Overlaping Interval Pairs
+
+
+```
+## Pairs object with 40 pairs and 0 metadata columns:
+##                                    first                              second
+##                                <GRanges>                           <GRanges>
+##    [1]              chr1:9033091-9033190              chr1:9027991-9034501:+
+##    [2]            chr1:43492265-43492364            chr1:43490080-43494183:+
+##    [3]            chr1:83170188-83170223            chr1:83167957-83171090:+
+##    [4]          chr1:106770471-106770570          chr1:106769537-106771836:+
+##    [5]            chr2:97750141-97750240            chr2:97748201-97752160:+
+##    ...                               ...                                 ...
+##   [36]       chrUn_NT_477194v1:1734-1776          chrUn_NT_477194v1:1-2617:+
+##   [37]         chrUn_NT_477781v1:787-822         chrUn_NT_477781v1:625-950:+
+##   [38]         chrUn_NT_478291v1:857-892        chrUn_NT_478291v1:538-1202:+
+##   [39]   chr6_NT_461060v1_random:591-626    chr6_NT_461060v1_random:7-1828:+
+##   [40] chrZ_NT_463816v1_random:7848-8194 chrZ_NT_463816v1_random:6717-8764:+
+```

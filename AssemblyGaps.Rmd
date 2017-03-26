@@ -7,7 +7,7 @@ output:
 ---
 
 ```{r set-options, setup, include=FALSE}
-options(width=90)
+options(width=120)
 knitr::opts_chunk$set(fig.width=8, echo=F, warning=F, message=F, cache=F)
 ```
 
@@ -291,4 +291,78 @@ table(gal2gaps$type)
 
 ```{r fig.height=6}
 graph(gal2gaps)
+```
+
+
+# Gaps & Rmsk Overlaps
+
+```{r}
+mm10rmsk <- RmsktoGR('../GenomeTables/mm10rmsk.txt.gz', BSgenome.Mmusculus.UCSC.mm10)
+gal5rmsk <- RmsktoGR('../GenomeTables/gal5rmsk.txt.gz', BSgenome.Ggallus.UCSC.galGal5)
+```
+
+## Mouse (mm10 Assembly)
+
+### Number of Overlaps between Gaps and Rmsk Intervals
+
+```{r}
+sum(countOverlaps(mm10gaps, mm10rmsk))
+```
+
+### Subset of Gaps Overlaping Rmsk Intervals
+
+```{r}
+subsetByOverlaps(mm10gaps, mm10rmsk)
+```
+
+### Subset of Rmsk Intervals Overlaping Gaps
+
+Some Rmsk intervals seem to overlap multiple gaps 
+
+```{r}
+subsetByOverlaps(mm10rmsk, mm10gaps)
+```
+
+### Number of Gaps Completely Covered (like 146%) by Rmsk Intervals
+
+```{r}
+sum(mm10gaps %within% mm10rmsk)
+```
+
+### Overlaping Interval Pairs
+
+```{r}
+findOverlapPairs(mm10gaps, mm10rmsk)
+```
+
+## Chicken (galGal5 Assembly)
+
+### Number of Overlaps between Gaps and Rmsk Intervals
+
+```{r}
+sum(countOverlaps(gal5gaps, gal5rmsk))
+```
+
+### Subset of Gaps Overlaping Rmsk Intervals
+
+```{r}
+subsetByOverlaps(gal5gaps, gal5rmsk)
+```
+
+### Subset of Rmsk Intervals Overlaping Gaps
+
+```{r}
+subsetByOverlaps(gal5rmsk, gal5gaps)
+```
+
+### Number of Gaps Completely Covered by Rmsk Intervals
+
+```{r}
+sum(gal5gaps %within% gal5rmsk)
+```
+
+### Overlaping Interval Pairs
+
+```{r}
+findOverlapPairs(gal5gaps, gal5rmsk)
 ```
